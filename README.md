@@ -36,7 +36,7 @@ npm install node-sp-auth --save
 
 ### Usage in TypeScript
 
-```typescript
+```javascript
 import { AuthConfig } from 'node-sp-auth-config';
 
 const authConfig = new AuthConfig({
