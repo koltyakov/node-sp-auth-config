@@ -40,7 +40,9 @@ npm install node-sp-auth --save
 import { AuthConfig } from 'node-sp-auth-config';
 
 const authConfig = new AuthConfig({
-    configPath: './config/private.json'
+    configPath: './config/private.json',
+    encryptPassword: true,
+    saveConfigOnDisk: true
 });
 
 authConfig.getContext()
@@ -59,7 +61,9 @@ authConfig.getContext()
 const AuthConfig = require('node-sp-auth-config').AuthConfig;
 
 const authConfig = new AuthConfig({
-    configPath: './config/private.json'
+    configPath: './config/private.json',
+    encryptPassword: true,
+    saveConfigOnDisk: true
 });
 
 authConfig.getContext()
