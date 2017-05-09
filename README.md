@@ -31,7 +31,7 @@ Authentication options:
 ### Install
 
 ```bash
-npm install node-sp-auth --save
+npm install node-sp-auth-config --save
 ```
 
 ### Usage in TypeScript
