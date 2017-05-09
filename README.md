@@ -76,7 +76,7 @@ authConfig.getContext()
     });
 ```
 
-### Parameters
+#### Initiation parameters
 
 - configPath?: string;          // Path to auth config .json | Default is './config/private.json'
 - encryptPassword?: boolean;    // Encrypt password to a machine-bind hash | Default is 'true'
