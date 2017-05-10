@@ -99,70 +99,102 @@ export class AuthConfig {
     }
 
     private checkForPrompts = (): Promise<ICheckPromptsResponse> => {
+        let getJsonContent = (filePath: string): Promise<any> => {
+            return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
+                fs.exists(filePath, (exists: boolean) => {
+                    let jsonRawData: any = {};
+                    if (exists) {
+                        jsonRawData = require(filePath);
+                    }
+                    resolve({
+                        exists,
+                        jsonRawData
+                    });
+                });
+            });
+        };
+        let runCheckForPrompts = (checkObject: ICheckPromptsResponse): Promise<ICheckPromptsResponse> => {
+            return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
+                getJsonContent(this.settings.configPath)
+                    .then(check => {
+                        checkObject.needPrompts = !check.exists;
+                        checkObject.jsonRawData = check.jsonRawData;
+                        return checkObject;
+                    })
+                    .then(checkObj => {
+                        if (typeof this.settings.defaultConfigPath !== 'undefined') {
+                            return getJsonContent(this.settings.defaultConfigPath)
+                                .then(check => {
+                                    checkObj.jsonRawData = {
+                                        ...check.jsonRawData,
+                                        ...checkObj.jsonRawData
+                                    };
+                                    return checkObject;
+                                });
+                        } else {
+                            return checkObj;
+                        }
+                    })
+                    .then(checkObj => {
+
+                        this.context = (checkObj.jsonRawData as IAuthContextSettings);
+
+                        let withPassword: boolean;
+                        let strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
+                            return strategy.id === this.context.strategy;
+                        });
+                        if (strategies.length === 1) {
+                            withPassword = strategies[0].withPassword;
+                        } else {
+                            withPassword = typeof this.context.password !== 'undefined';
+                        }
+
+                        // Strategies with password
+                        if (withPassword) {
+                            let initialPassword = `${this.context.password || ''}`;
+                            if (this.context.password === '' || typeof this.context.password === 'undefined') {
+                                checkObj.needPrompts = true;
+                            } else {
+                                this.context.password = cpass.decode(this.context.password);
+                                let encodedPassword = cpass.encode(this.context.password);
+                                if (initialPassword !== encodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
+                                    checkObj.needSave = true;
+                                }
+                            }
+                        }
+
+                        checkObj.authContext = convertSettingsToAuthContext(this.context);
+
+                        // Verify strategy parameters
+                        if (strategies.length === 1) {
+                            if (!checkObj.needPrompts) {
+                                checkObj.needPrompts = !strategies[0].verifyCallback(this.context.siteUrl, this.context);
+                            }
+                            resolve(checkObj);
+                        } else {
+                            // No strategies found
+                            if (checkObj.needPrompts) {
+                                resolve(checkObj);
+                            } else {
+                                this.tryAuth(checkObj.authContext)
+                                    .then(() => {
+                                        checkObj.needPrompts = false;
+                                        resolve(checkObj);
+                                    })
+                                    .catch((error: any) => {
+                                        checkObj.needPrompts = true;
+                                        resolve(checkObj);
+                                    });
+                            }
+                        }
+                    });
+            });
+        };
         let checkPromptsObject: ICheckPromptsResponse = {
             needPrompts: true,
             needSave: false
         };
-        return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-            fs.exists(this.settings.configPath, (exists: boolean) => {
-                checkPromptsObject.needPrompts = !exists;
-
-                if (exists) {
-                    this.context = require(this.settings.configPath);
-                } else {
-                    this.context = ({} as IAuthContextSettings);
-                }
-
-                let withPassword: boolean;
-                let strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
-                    return strategy.id === this.context.strategy;
-                });
-                if (strategies.length === 1) {
-                    withPassword = strategies[0].withPassword;
-                } else {
-                    withPassword = typeof this.context.password !== 'undefined';
-                }
-
-                // Strategies with password
-                if (withPassword) {
-                    let initialPassword = `${this.context.password || ''}`;
-                    if (this.context.password === '' || typeof this.context.password === 'undefined') {
-                        checkPromptsObject.needPrompts = true;
-                    } else {
-                        this.context.password = cpass.decode(this.context.password);
-                        let encodedPassword = cpass.encode(this.context.password);
-                        if (initialPassword !== encodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
-                            checkPromptsObject.needSave = true;
-                        }
-                    }
-                }
-
-                checkPromptsObject.authContext = convertSettingsToAuthContext(this.context);
-
-                // Verify strategy parameters
-                if (strategies.length === 1) {
-                    if (!checkPromptsObject.needPrompts) {
-                        checkPromptsObject.needPrompts = !strategies[0].verifyCallback(this.context.siteUrl, this.context);
-                    }
-                    resolve(checkPromptsObject);
-                } else {
-                    // No strategies found
-                    if (checkPromptsObject.needPrompts) {
-                        resolve(checkPromptsObject);
-                    } else {
-                        this.tryAuth(checkPromptsObject.authContext)
-                            .then(() => {
-                                checkPromptsObject.needPrompts = false;
-                                resolve(checkPromptsObject);
-                            })
-                            .catch((error: any) => {
-                                checkPromptsObject.needPrompts = true;
-                                resolve(checkPromptsObject);
-                            });
-                    }
-                }
-            });
-        });
+        return runCheckForPrompts(checkPromptsObject);
     }
 
 }

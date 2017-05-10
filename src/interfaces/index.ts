@@ -31,6 +31,7 @@ export interface IStrategyDictItem {
 
 export interface IAuthConfigSettings {
     configPath?: string;
+    defaultConfigPath?: string;
     encryptPassword?: boolean;
     saveConfigOnDisk?: boolean;
 }
@@ -39,4 +40,5 @@ export interface ICheckPromptsResponse {
     needPrompts: boolean;
     needSave: boolean;
     authContext?: IAuthContext;
+    jsonRawData?: any;
 }

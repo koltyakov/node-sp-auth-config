@@ -2,7 +2,8 @@ const path = require('path');
 const AuthConfig = require('../dist/index').AuthConfig;
 
 const authConfig = new AuthConfig({
-    configPath: path.join(__dirname, '../config/private.json')
+    configPath: path.join(__dirname, '../config/private.json'),
+    defaultConfigPath: path.join(__dirname, '../config/default.json')
 });
 
 authConfig.getContext()
