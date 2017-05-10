@@ -143,6 +143,7 @@ export class AuthConfig {
                 if (strategies.length === 1) {
                     if (!checkPromptsObject.needPrompts) {
                         checkPromptsObject.needPrompts = !strategies[0].verifyCallback(this.context.siteUrl, this.context);
+                        console.log(checkPromptsObject.needPrompts, this.context.siteUrl, this.context, strategies[0].verifyCallback);
                     }
                     resolve(checkPromptsObject);
                 } else {

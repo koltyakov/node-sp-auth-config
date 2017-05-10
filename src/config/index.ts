@@ -24,7 +24,9 @@ export const getStrategies = (): IStrategyDictItem[] => {
             name: 'Add-In only permissions',
             withPassword: false,
             target: [ 'OnPremise' ],
-            verifyCallback: spauth.isAddinOnlyOnpremise
+            verifyCallback:  (...args: any[]) => {
+                return spauth.isAddinOnlyOnpremise(args[1]);
+            }
         }, {
             id: 'UserCredentials',
             name: 'User credentials (SAML)',
@@ -36,13 +38,17 @@ export const getStrategies = (): IStrategyDictItem[] => {
             name: 'Add-In only permissions',
             withPassword: false,
             target: [ 'Online' ],
-            verifyCallback: spauth.isAddinOnlyOnline
+            verifyCallback: (...args: any[]) => {
+                return spauth.isAddinOnlyOnline(args[1]);
+            }
         }, {
             id: 'AdfsUserCredentials',
             name: 'ADFS user credentials',
             withPassword: true,
             target: [ 'Online', 'OnPremise' ],
-            verifyCallback: spauth.isAdfsCredentials
+            verifyCallback: (...args: any[]) => {
+                return spauth.isAdfsCredentials(args[1]);
+            }
         }
     ];
 
