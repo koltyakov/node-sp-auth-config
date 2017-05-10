@@ -12,12 +12,24 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 name: 'clientId',
                 message: 'clientId',
                 type: 'input',
-                default: onlineAddinCredentials.clientId
+                default: onlineAddinCredentials.clientId,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'clientSecret',
                 message: 'clientSecret',
                 type: 'input',
-                default: onlineAddinCredentials.clientSecret
+                default: onlineAddinCredentials.clientSecret,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         ];
         inquirer.prompt(promptFor)

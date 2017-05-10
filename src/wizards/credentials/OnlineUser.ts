@@ -12,12 +12,24 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 name: 'username',
                 message: 'User name',
                 type: 'input',
-                default: userCredentials.username
+                default: userCredentials.username,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'password',
                 message: 'Password',
                 type: 'password',
-                default: userCredentials.password
+                default: userCredentials.password,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         ];
         inquirer.prompt(promptFor)

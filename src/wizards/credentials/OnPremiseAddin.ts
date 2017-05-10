@@ -12,27 +12,57 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 name: 'clientId',
                 message: 'clientId',
                 type: 'input',
-                default: onPremiseAddinCredentials.clientId
+                default: onPremiseAddinCredentials.clientId,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'issuerId',
                 message: 'issuerId',
                 type: 'input',
-                default: onPremiseAddinCredentials.issuerId
+                default: onPremiseAddinCredentials.issuerId,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'realm',
                 message: 'realm',
                 type: 'input',
-                default: onPremiseAddinCredentials.realm
+                default: onPremiseAddinCredentials.realm,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'rsaPrivateKeyPath',
                 message: 'rsaPrivateKeyPath',
                 type: 'input',
-                default: onPremiseAddinCredentials.rsaPrivateKeyPath
+                default: onPremiseAddinCredentials.rsaPrivateKeyPath,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'shaThumbprint',
                 message: 'shaThumbprint',
                 type: 'input',
-                default: onPremiseAddinCredentials.shaThumbprint
+                default: onPremiseAddinCredentials.shaThumbprint,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         ];
         inquirer.prompt(promptFor)

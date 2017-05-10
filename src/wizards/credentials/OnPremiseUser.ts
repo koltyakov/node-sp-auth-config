@@ -12,7 +12,13 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 name: 'username',
                 message: 'User name',
                 type: 'input',
-                default: onPremiseUserCredentials.username
+                default: onPremiseUserCredentials.username,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         ];
         inquirer.prompt(promptFor)
@@ -37,14 +43,26 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                         name: 'domain',
                         message: 'Domain',
                         type: 'input',
-                        default: onPremiseUserCredentials.domain
+                        default: onPremiseUserCredentials.domain,
+                        validate: (answer: string) => {
+                            if (answer.length === 0) {
+                                return false;
+                            }
+                            return true;
+                        }
                     });
                 }
                 promptFor.push({
                     name: 'password',
                     message: 'Password',
                     type: 'password',
-                    default: onPremiseUserCredentials.password
+                    default: onPremiseUserCredentials.password,
+                    validate: (answer: string) => {
+                        if (answer.length === 0) {
+                            return false;
+                        }
+                        return true;
+                    }
                 });
                 inquirer.prompt(promptFor)
                     // tslint:disable-next-line:no-shadowed-variable

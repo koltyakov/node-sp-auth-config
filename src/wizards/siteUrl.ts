@@ -13,7 +13,13 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
             name: 'siteUrl',
             message: 'SharePoint URL',
             type: 'string',
-            default: authContext.siteUrl
+            default: authContext.siteUrl,
+            validate: (answer: string) => {
+                if (answer.length === 0) {
+                    return false;
+                }
+                return true;
+            }
         }];
         inquirer.prompt(promptFor)
             .then((answers: inquirer.Answers) => {

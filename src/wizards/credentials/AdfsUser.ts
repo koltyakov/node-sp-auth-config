@@ -12,27 +12,57 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 name: 'username',
                 message: 'User name',
                 type: 'input',
-                default: adfsUserCredentials.username
+                default: adfsUserCredentials.username,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'password',
                 message: 'Password',
                 type: 'password',
-                default: adfsUserCredentials.password
+                default: adfsUserCredentials.password,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'relyingParty',
                 message: 'relyingParty',
                 type: 'input',
-                default: adfsUserCredentials.relyingParty || 'urn:sharepoint:portal'
+                default: adfsUserCredentials.relyingParty || 'urn:sharepoint:portal',
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'adfsUrl',
                 message: 'adfsUrl',
                 type: 'input',
-                default: adfsUserCredentials.adfsUrl
+                default: adfsUserCredentials.adfsUrl,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'adfsCookie',
                 message: 'adfsCookie',
                 type: 'input',
-                default: adfsUserCredentials.adfsCookie || 'FedAuth'
+                default: adfsUserCredentials.adfsCookie || 'FedAuth',
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         ];
         inquirer.prompt(promptFor)

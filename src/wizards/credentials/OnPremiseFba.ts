@@ -12,12 +12,24 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 name: 'username',
                 message: 'User name',
                 type: 'input',
-                default: onPremiseFbaCredentials.username
+                default: onPremiseFbaCredentials.username,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }, {
                 name: 'password',
                 message: 'Password',
                 type: 'password',
-                default: onPremiseFbaCredentials.password
+                default: onPremiseFbaCredentials.password,
+                validate: (answer: string) => {
+                    if (answer.length === 0) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         ];
         inquirer.prompt(promptFor)
