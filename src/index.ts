@@ -47,7 +47,7 @@ export class AuthConfig {
         };
     }
 
-    public getContext = (): Promise<IAuthContextSettings> => {
+    public getContext = (): Promise<IAuthContext> => {
         console.log('Config path: ' + this.settings.configPath);
         return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
             return this.checkForPrompts()
