@@ -156,8 +156,9 @@ export class AuthConfig {
                                 checkObj.needPrompts = true;
                             } else {
                                 this.context.password = cpass.decode(this.context.password);
-                                let encodedPassword = cpass.encode(this.context.password);
-                                if (initialPassword !== encodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
+                                let decodedPassword = this.context.password;
+                                let encodedPassword = cpass.encode(decodedPassword);
+                                if (initialPassword === decodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
                                     checkObj.needSave = true;
                                 }
                             }
