@@ -19,17 +19,18 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
             message: 'Authentication strategy',
             type: 'list',
             choices: strategies.map((strategy: IStrategyDictItem) => {
-                let checked: boolean = false;
-                if (authContext.strategy === strategy.id) {
-                    checked = true;
-                }
                 return {
                     name: strategy.name,
                     value: strategy.id,
-                    short: strategy.name,
-                    checked
+                    short: strategy.name
                 };
-            })
+            }),
+            default: strategies.reduce((position: number, strategy: IStrategyDictItem, index: number) => {
+                if (authContext.strategy === strategy.id) {
+                    position = index;
+                }
+                return position;
+            }, 0)
         }];
         // tslint:disable-next-line:no-shadowed-variable
         inquirer.prompt(promptFor)
