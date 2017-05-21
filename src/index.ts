@@ -199,3 +199,5 @@ export class AuthConfig {
     }
 
 }
+
+export { IAuthContext, IAuthConfigSettings } from './interfaces';
