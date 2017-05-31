@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as Promise from 'bluebird';
-import * as Cpass from 'cpass';
+import { Cpass } from 'cpass';
 import * as spauth from 'node-sp-auth';
 
 // Utils
@@ -95,7 +94,7 @@ export class AuthConfig {
     }
 
     private tryAuth = (authContext: IAuthContext): Promise<IAuthResponse> => {
-        return spauth.getAuth(authContext.siteUrl, authContext.authOptions);
+        return <any>spauth.getAuth(authContext.siteUrl, authContext.authOptions);
     }
 
     private checkForPrompts = (): Promise<ICheckPromptsResponse> => {

@@ -1,5 +1,4 @@
 import * as inquirer from 'inquirer';
-import * as Promise from 'bluebird';
 
 import { IAuthContext, IAuthConfigSettings, IStrategyDictItem } from '../interfaces';
 import { getStrategies } from '../config';
@@ -9,7 +8,10 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
         let promptFor: inquirer.Question[] = [];
 
         // SharePoint Online/OnPremise autodetection
-        let target: ('Online' | 'OnPremise') = answersAll.siteUrl.toLowerCase().indexOf('.sharepoint.com') !== -1 ? 'Online' : 'OnPremise';
+        let target: ('Online' | 'OnPremise') = (
+            answersAll.siteUrl.toLowerCase().indexOf('.sharepoint.com') !== -1 ||
+            answersAll.siteUrl.toLowerCase().indexOf('.sharepoint.cn') !== -1
+        ) ? 'Online' : 'OnPremise';
         let strategies: IStrategyDictItem[] = getStrategies().filter((strategy: IStrategyDictItem) => {
             return strategy.target.indexOf(target) !== -1;
         });

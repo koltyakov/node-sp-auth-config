@@ -1,5 +1,4 @@
 import * as inquirer from 'inquirer';
-import * as Promise from 'bluebird';
 
 import { convertAuthContextToSettings, convertSettingsToAuthContext, saveConfigOnDisk } from '../utils';
 import { IAuthContext, IAuthConfigSettings } from '../interfaces';

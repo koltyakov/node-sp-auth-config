@@ -1,7 +1,7 @@
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as Cpass from 'cpass';
+import { Cpass } from 'cpass';
 
 import { IAuthContext, IAuthContextSettings, IAuthConfigSettings } from '../interfaces';
 

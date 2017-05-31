@@ -1,7 +1,7 @@
 {
   "name": "node-sp-auth-config",
   "description": "Config options builder for node-sp-auth (SharePoint Authentication in Node.js)",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "main": "./dist/index.js",
   "typings": "./dist/index",
   "scripts": {
@@ -28,15 +28,13 @@
   },
   "homepage": "https://github.com/koltyakov/node-sp-auth-config#readme",
   "dependencies": {
-    "bluebird": "^3.5.0",
     "colors": "^1.1.2",
-    "cpass": "^1.0.2",
+    "cpass": "^2.0.0",
     "inquirer": "^3.0.6",
     "mkdirp": "^0.5.1",
     "node-sp-auth": "^1.3.3"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.3",
     "@types/inquirer": "0.0.34",
     "@types/node": "^7.0.18",
     "del": "^2.2.2",
