@@ -40,7 +40,7 @@ export class AuthConfig {
         this.targets = getTargetsTypes();
         this.settings = {
             ...settings,
-            configPath: path.resolve(settings.configPath) || path.resolve('./config/private.json'),
+            configPath: path.resolve(settings.configPath || './config/private.json'),
             encryptPassword: typeof settings.encryptPassword !== 'undefined' ? settings.encryptPassword : true,
             saveConfigOnDisk: typeof settings.saveConfigOnDisk !== 'undefined' ? settings.saveConfigOnDisk : true
         };
