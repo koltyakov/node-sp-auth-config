@@ -103,7 +103,7 @@ export class AuthConfig {
                 fs.exists(filePath, (exists: boolean) => {
                     let jsonRawData: any = {};
                     if (exists) {
-                        jsonRawData = require(filePath);
+                        jsonRawData = require(path.resolve(filePath));
                     }
                     resolve({
                         exists,
