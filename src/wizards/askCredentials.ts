@@ -9,6 +9,7 @@ import onPremiseFbaWizard from './credentials/OnPremiseFba';
 import onlineAddinWizard from './credentials/OnlineAddin';
 import onlineUserWizard from './credentials/OnlineUser';
 import adfsUserWizard from './credentials/AdfsUser';
+import onDemandWizard from './credentials/OnDemand';
 // <<< Strategies wizards
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
@@ -35,6 +36,9 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 break;
             case 'AdfsUserCredentials':
                 resolve(adfsUserWizard(authContext, answersAll));
+                break;
+            case 'OnDemandCredentials':
+                resolve(onDemandWizard(authContext, answersAll));
                 break;
             default:
                 resolve(answersAll);

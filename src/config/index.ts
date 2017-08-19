@@ -49,6 +49,14 @@ export const getStrategies = (): IStrategyDictItem[] => {
             verifyCallback: (...args: any[]) => {
                 return spauth.isAdfsCredentials(args[1]);
             }
+        }, {
+            id: 'OnDemandCredentials',
+            name: 'On-demand credentials',
+            withPassword: false,
+            target: [ 'Online', 'OnPremise' ],
+            verifyCallback: (...args: any[]) => {
+                return spauth.isOndemandCredentials(args[1]);
+            }
         }
     ];
 

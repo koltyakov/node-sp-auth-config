@@ -1,28 +1,30 @@
 // Auth interfaces
-import {
-    IOnPremiseAddinCredentials, IOnpremiseUserCredentials, IOnpremiseFbaCredentials,
-    IOnlineAddinCredentials, IUserCredentials, IAdfsUserCredentials
-} from 'node-sp-auth';
+import { IAuthOptions } from 'node-sp-auth';
 // Auth interfaces
+
+export type StrategyCode =
+    'OnPremiseAddinCredentials' |
+    'OnpremiseUserCredentials' |
+    'OnpremiseFbaCredentials' |
+    'OnlineAddinCredentials' |
+    'UserCredentials' |
+    'AdfsUserCredentials' |
+    'OnDemandCredentials';
 
 export interface IAuthContext {
     siteUrl: string;
-    strategy?: 'OnPremiseAddinCredentials' | 'OnpremiseUserCredentials' | 'OnpremiseFbaCredentials' |
-               'OnlineAddinCredentials' | 'UserCredentials' | 'AdfsUserCredentials';
-    authOptions: IOnPremiseAddinCredentials | IOnpremiseUserCredentials | IOnpremiseFbaCredentials |
-                 IOnlineAddinCredentials | IUserCredentials | IAdfsUserCredentials;
+    strategy?: StrategyCode;
+    authOptions: IAuthOptions;
 }
 
 export interface IAuthContextSettings {
     siteUrl: string;
-    strategy?: 'OnPremiseAddinCredentials' | 'OnpremiseUserCredentials' | 'OnpremiseFbaCredentials' |
-               'OnlineAddinCredentials' | 'UserCredentials' | 'AdfsUserCredentials';
+    strategy?: StrategyCode;
     [name: string]: any;
 }
 
 export interface IStrategyDictItem {
-    id: 'OnPremiseAddinCredentials' | 'OnpremiseUserCredentials' | 'OnpremiseFbaCredentials' |
-        'OnlineAddinCredentials' | 'UserCredentials' | 'AdfsUserCredentials';
+    id: StrategyCode;
     withPassword: boolean;
     target: ('OnPremise' | 'Online')[];
     name: string;
