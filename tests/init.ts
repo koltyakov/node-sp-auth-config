@@ -3,7 +3,10 @@ import { AuthConfig } from '../src/index';
 
 const authConfig = new AuthConfig({
     configPath: path.join(__dirname, '../config/private.json'),
-    defaultConfigPath: path.join(__dirname, '../config/default.json')
+    defaultConfigPath: path.join(__dirname, '../config/default.json'),
+    authOptions: {
+        ondemand: true
+    }
 });
 
 authConfig.getContext()

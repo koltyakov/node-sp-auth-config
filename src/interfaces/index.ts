@@ -36,6 +36,8 @@ export interface IAuthConfigSettings {
     defaultConfigPath?: string;
     encryptPassword?: boolean;
     saveConfigOnDisk?: boolean;
+    authOptions?: IAuthOptions;
+    forcePrompts?: boolean;
 }
 
 export interface ICheckPromptsResponse {

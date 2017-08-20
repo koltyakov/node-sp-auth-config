@@ -15,10 +15,7 @@ import saveOnDiskWizard from './wizards/saveOnDisk';
 import { getStrategies, getTargetsTypes } from './config';
 
 // Auth interfaces >>>
-import {
-    IOnPremiseAddinCredentials, IOnpremiseUserCredentials, IOnpremiseFbaCredentials,
-    IOnlineAddinCredentials, IUserCredentials, IAdfsUserCredentials, IAuthResponse
-} from 'node-sp-auth';
+import { IAuthOptions, IAuthResponse } from 'node-sp-auth';
 // <<< Auth interfaces
 
 import {
@@ -98,23 +95,30 @@ export class AuthConfig {
     }
 
     private checkForPrompts = (): Promise<ICheckPromptsResponse> => {
-        let getJsonContent = (filePath: string): Promise<any> => {
+        let getJsonContent = (filePath: string, jsonData?: IAuthOptions): Promise<any> => {
             return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-                fs.exists(filePath, (exists: boolean) => {
-                    let jsonRawData: any = {};
-                    if (exists) {
-                        jsonRawData = require(path.resolve(filePath));
-                    }
-                    resolve({
-                        exists,
-                        jsonRawData
+                if (typeof jsonData === 'undefined') {
+                    fs.exists(filePath, (exists: boolean) => {
+                        let jsonRawData: any = {};
+                        if (exists) {
+                            jsonRawData = require(path.resolve(filePath));
+                        }
+                        resolve({
+                            exists,
+                            jsonRawData
+                        });
                     });
-                });
+                } else {
+                    resolve({
+                        exists: true,
+                        jsonRawData: jsonData
+                    });
+                }
             });
         };
         let runCheckForPrompts = (checkObject: ICheckPromptsResponse): Promise<ICheckPromptsResponse> => {
             return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-                getJsonContent(this.settings.configPath)
+                getJsonContent(this.settings.configPath, this.settings.authOptions)
                     .then(check => {
                         checkObject.needPrompts = !check.exists;
                         checkObject.jsonRawData = check.jsonRawData;
@@ -165,6 +169,11 @@ export class AuthConfig {
 
                         checkObj.authContext = convertSettingsToAuthContext(this.context);
 
+                        // Force prompts
+                        if (this.settings.forcePrompts === true) {
+                            checkObj.needPrompts = true;
+                        }
+
                         // Verify strategy parameters
                         if (strategies.length === 1) {
                             if (!checkObj.needPrompts) {
@@ -200,3 +209,4 @@ export class AuthConfig {
 }
 
 export { IAuthContext, IAuthConfigSettings } from './interfaces';
+export { IAuthOptions } from 'node-sp-auth';
