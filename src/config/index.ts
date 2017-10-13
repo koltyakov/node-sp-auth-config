@@ -20,6 +20,12 @@ export const getStrategies = (): IStrategyDictItem[] => {
             target: [ 'OnPremise' ],
             verifyCallback: spauth.isFbaCredentialsOnpremise
         }, {
+            id: 'OnpremiseTmgCredentials',
+            name: 'Forefront TMG autherntication',
+            withPassword: true,
+            target: [ 'OnPremise' ],
+            verifyCallback: spauth.isTmgCredentialsOnpremise
+        }, {
             id: 'OnPremiseAddinCredentials',
             name: 'Add-In only permissions',
             withPassword: false,
@@ -57,12 +63,6 @@ export const getStrategies = (): IStrategyDictItem[] => {
             verifyCallback: (...args: any[]) => {
                 return spauth.isOndemandCredentials(args[1]);
             }
-        }, {
-            id: 'OnpremiseTmgCredentials',
-            name: 'Forefront TMG autherntication',
-            withPassword: true,
-            target: [ 'OnPremise' ],
-            verifyCallback: spauth.isTmgCredentialsOnpremise
         }
     ];
 
