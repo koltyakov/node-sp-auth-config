@@ -21,7 +21,7 @@ export const getStrategies = (): IStrategyDictItem[] => {
             verifyCallback: spauth.isFbaCredentialsOnpremise
         }, {
             id: 'OnpremiseTmgCredentials',
-            name: 'Forefront TMG autherntication',
+            name: 'Forefront TMG authentication',
             withPassword: true,
             target: [ 'OnPremise' ],
             verifyCallback: spauth.isTmgCredentialsOnpremise
