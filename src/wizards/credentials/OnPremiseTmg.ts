@@ -5,7 +5,7 @@ import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
     return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-        let onPremiseTmgCredentials: IOnpremiseFbaCredentials = (authContext.authOptions as IOnpremiseFbaCredentials);
+        let onPremiseTmgCredentials: IOnpremiseTmgCredentials = (authContext.authOptions as IOnpremiseTmgCredentials);
         let promptFor: inquirer.Question[] = [
             {
                 name: 'username',
