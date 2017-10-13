@@ -5,6 +5,7 @@ import { IAuthContext, IAuthConfigSettings } from '../interfaces';
 // Strategies wizards >>>
 import onPremiseAddinWizard from './credentials/OnPremiseAddin';
 import onPremiseUserWizard from './credentials/OnPremiseUser';
+import onPremiseTmgWizard from './credentials/OnPremiseTmg';
 import onPremiseFbaWizard from './credentials/OnPremiseFba';
 import onlineAddinWizard from './credentials/OnlineAddin';
 import onlineUserWizard from './credentials/OnlineUser';
@@ -24,6 +25,9 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
                 break;
             case 'OnpremiseUserCredentials':
                 resolve(onPremiseUserWizard(authContext, answersAll));
+                break;
+            case 'OnpremiseTmgCredentials':
+                resolve(onPremiseTmgWizard(authContext, answersAll));
                 break;
             case 'OnpremiseFbaCredentials':
                 resolve(onPremiseFbaWizard(authContext, answersAll));

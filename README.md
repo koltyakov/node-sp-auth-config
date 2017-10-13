@@ -23,6 +23,7 @@ Authentication options:
   - Addin only permissions
   - User credentials through the http ntlm handshake
   - Form-based authentication (FBA)
+  - Forefront TMG authentication
 - SharePoint Online:
   - Addin only permissions
   - SAML based with user credentials

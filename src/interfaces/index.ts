@@ -5,6 +5,7 @@ import { IAuthOptions } from 'node-sp-auth';
 export type StrategyCode =
     'OnPremiseAddinCredentials' |
     'OnpremiseUserCredentials' |
+    'OnpremiseTmgCredentials' |
     'OnpremiseFbaCredentials' |
     'OnlineAddinCredentials' |
     'UserCredentials' |
