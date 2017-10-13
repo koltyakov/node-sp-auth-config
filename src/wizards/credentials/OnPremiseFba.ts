@@ -35,7 +35,10 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
             .then((answers: inquirer.Answers) => {
                 answersAll = {
                     ...answersAll,
-                    ...answers
+                    ...answers,
+                    ...{
+                        fba: true
+                    }
                 };
                 resolve(answersAll);
             });
