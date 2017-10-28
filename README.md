@@ -42,19 +42,19 @@ npm install node-sp-auth-config --save
 import { AuthConfig } from 'node-sp-auth-config';
 
 const authConfig = new AuthConfig({
-    configPath: './config/private.json',
-    encryptPassword: true,
-    saveConfigOnDisk: true
+  configPath: './config/private.json',
+  encryptPassword: true,
+  saveConfigOnDisk: true
 });
 
 authConfig.getContext()
-    .then(context => {
-        console.log(JSON.stringify(context, null, 2));
-        // context.authOptions - node-sp-auth authentication options
-    })
-    .catch(error => {
-        console.log(error);
-    });
+  .then(context => {
+    console.log(JSON.stringify(context, null, 2));
+    // context.authOptions - node-sp-auth authentication options
+  })
+  .catch(error => {
+    console.log(error);
+  });
 ```
 
 ### Usage in JavaScript
@@ -63,19 +63,19 @@ authConfig.getContext()
 const AuthConfig = require('node-sp-auth-config').AuthConfig;
 
 const authConfig = new AuthConfig({
-    configPath: './config/private.json',
-    encryptPassword: true,
-    saveConfigOnDisk: true
+  configPath: './config/private.json',
+  encryptPassword: true,
+  saveConfigOnDisk: true
 });
 
 authConfig.getContext()
-    .then(context => {
-        console.log(JSON.stringify(context, null, 2));
-        // context.authOptions - node-sp-auth authentication options
-    })
-    .catch(error => {
-        console.log(error);
-    });
+  .then(context => {
+    console.log(JSON.stringify(context, null, 2));
+    // context.authOptions - node-sp-auth authentication options
+  })
+  .catch(error => {
+    console.log(error);
+  });
 ```
 
 #### Initiation parameters

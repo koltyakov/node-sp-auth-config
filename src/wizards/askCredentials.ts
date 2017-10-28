@@ -14,41 +14,41 @@ import onDemandWizard from './credentials/OnDemand';
 // <<< Strategies wizards
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-    return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-        let promptFor: inquirer.Question[] = [];
+  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
+    let promptFor: inquirer.Question[] = [];
 
-        // Ask for strategy specific parameters
-        promptFor = [];
-        switch (answersAll.strategy) {
-            case 'OnPremiseAddinCredentials':
-                resolve(onPremiseAddinWizard(authContext, answersAll));
-                break;
-            case 'OnpremiseUserCredentials':
-                resolve(onPremiseUserWizard(authContext, answersAll));
-                break;
-            case 'OnpremiseTmgCredentials':
-                resolve(onPremiseTmgWizard(authContext, answersAll));
-                break;
-            case 'OnpremiseFbaCredentials':
-                resolve(onPremiseFbaWizard(authContext, answersAll));
-                break;
-            case 'OnlineAddinCredentials':
-                resolve(onlineAddinWizard(authContext, answersAll));
-                break;
-            case 'UserCredentials':
-                resolve(onlineUserWizard(authContext, answersAll));
-                break;
-            case 'AdfsUserCredentials':
-                resolve(adfsUserWizard(authContext, answersAll));
-                break;
-            case 'OnDemandCredentials':
-                resolve(onDemandWizard(authContext, answersAll));
-                break;
-            default:
-                resolve(answersAll);
-                break;
-        }
-    });
+    // Ask for strategy specific parameters
+    promptFor = [];
+    switch (answersAll.strategy) {
+      case 'OnPremiseAddinCredentials':
+        resolve(onPremiseAddinWizard(authContext, answersAll));
+        break;
+      case 'OnpremiseUserCredentials':
+        resolve(onPremiseUserWizard(authContext, answersAll));
+        break;
+      case 'OnpremiseTmgCredentials':
+        resolve(onPremiseTmgWizard(authContext, answersAll));
+        break;
+      case 'OnpremiseFbaCredentials':
+        resolve(onPremiseFbaWizard(authContext, answersAll));
+        break;
+      case 'OnlineAddinCredentials':
+        resolve(onlineAddinWizard(authContext, answersAll));
+        break;
+      case 'UserCredentials':
+        resolve(onlineUserWizard(authContext, answersAll));
+        break;
+      case 'AdfsUserCredentials':
+        resolve(adfsUserWizard(authContext, answersAll));
+        break;
+      case 'OnDemandCredentials':
+        resolve(onDemandWizard(authContext, answersAll));
+        break;
+      default:
+        resolve(answersAll);
+        break;
+    }
+  });
 };
 
 export default wizard;
