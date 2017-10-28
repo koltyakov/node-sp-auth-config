@@ -30,15 +30,16 @@
   "homepage": "https://github.com/koltyakov/node-sp-auth-config#readme",
   "dependencies": {
     "colors": "^1.1.2",
-    "cpass": "^2.0.2",
+    "cpass": "^2.0.3",
     "inquirer": "^3.3.0",
     "mkdirp": "^0.5.1",
     "node-sp-auth": "^2.2.9"
   },
   "devDependencies": {
     "@types/inquirer": "0.0.35",
-    "@types/node": "^8.0.46",
+    "@types/node": "^8.0.47",
     "del": "^3.0.0",
+    "eslint-config-standard": "^10.2.1",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-tslint": "^8.1.2",
@@ -46,6 +47,7 @@
     "merge-stream": "^1.0.1",
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
+    "tslint-config-standard": "^7.0.0",
     "typescript": "^2.5.3",
     "yargs": "^10.0.3"
   }
