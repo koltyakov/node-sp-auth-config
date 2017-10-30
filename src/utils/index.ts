@@ -57,3 +57,5 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
     });
   });
 };
+
+export const defaultPasswordMask: string = '********';

@@ -2,6 +2,7 @@ import * as inquirer from 'inquirer';
 
 import { IUserCredentials } from 'node-sp-auth';
 import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
+import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
@@ -22,7 +23,7 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
         name: 'password',
         message: 'Password',
         type: 'password',
-        default: userCredentials.password,
+        default: userCredentials.password ? defaultPasswordMask : null,
         validate: (answer: string) => {
           if (answer.length === 0) {
             return false;
@@ -35,7 +36,10 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
       .then((answers: inquirer.Answers) => {
         answersAll = {
           ...answersAll,
-          ...answers
+          ...answers,
+          password: answers.password === defaultPasswordMask
+            ? userCredentials.password
+            : answers.password
         };
         resolve(answersAll);
       });

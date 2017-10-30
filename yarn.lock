@@ -54,17 +54,13 @@
   version "4.14.78"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.78.tgz#f26a0b38a44a832c652964803c7e48be05939d3f"
 
-"@types/node@*":
-  version "8.0.46"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.46.tgz#6e1766b2d0ed06631d5b5f87bb8e72c8dbb6888e"
+"@types/node@*", "@types/node@^8.0.47":
+  version "8.0.47"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.47.tgz#968e596f91acd59069054558a00708c445ca30c2"
 
 "@types/node@^6.0.45":
   version "6.0.90"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.90.tgz#0ed74833fa1b73dcdb9409dcb1c97ec0a8b13b02"
-
-"@types/node@^8.0.47":
-  version "8.0.47"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.47.tgz#968e596f91acd59069054558a00708c445ca30c2"
 
 "@types/request-promise@^4.1.36":
   version "4.1.38"
@@ -454,14 +450,7 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
-cpass@^2.0.0, cpass@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/cpass/-/cpass-2.0.2.tgz#494570d0b2ee9931834b3c23e7ecb3f84c968864"
-  dependencies:
-    os "^0.1.1"
-    simple-encryptor "^1.1.0"
-
-cpass@^2.0.3:
+cpass@^2.0.0, cpass@^2.0.1, cpass@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/cpass/-/cpass-2.0.3.tgz#13d9982b76484212e4d35351b31369c8a51ad290"
   dependencies:
@@ -2220,7 +2209,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-simple-encryptor@^1.1.0, simple-encryptor@^1.1.1:
+simple-encryptor@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/simple-encryptor/-/simple-encryptor-1.1.1.tgz#be81f8db4b09a370109194ec058ac00db6cf7b05"
   dependencies:
