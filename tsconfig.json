@@ -8,6 +8,7 @@
     "moduleResolution": "node",
     "noImplicitAny": false,
     "removeComments": true,
+    "newLine": "LF",
     "types": [
       "node"
     ]

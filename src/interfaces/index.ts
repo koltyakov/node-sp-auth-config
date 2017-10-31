@@ -47,3 +47,8 @@ export interface ICheckPromptsResponse {
   authContext?: IAuthContext;
   jsonRawData?: any;
 }
+
+export interface ICliParameters {
+  path: string;
+  encrypt?: boolean;
+}
