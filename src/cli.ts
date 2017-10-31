@@ -7,15 +7,17 @@ import * as path from 'path';
 import { ICliParameters } from './interfaces';
 import { AuthConfig } from '.';
 
+const { version } = require(path.join(__dirname, '..', 'package.json'));
+
 program
-  .version('1.0.0')
+  .version(version)
   .name('sp-auth')
   .usage('[command]')
   .description('Command line config options builder for node-sp-auth (SharePoint Authentication in Node.js)')
   .command('init')
   .description('writes new file with node-sp-auth credentials into the file system')
   .option('-p, --path [value]', 'relative path to file which will store your credentials, required')
-  .option('-e, --encrypt [true,false]', 'specify false if you don\'t need to encrypt password in the file, optional, default is true', true)
+  .option('-e, --encrypt [true, false]', 'specify false if you don\'t need to encrypt password in the file, optional, default is true', true)
   .action((options: ICliParameters) => {
     if (typeof options.path === 'undefined') {
       console.log(
@@ -35,13 +37,14 @@ program
     const authConfig = new AuthConfig({
       configPath: options.path,
       encryptPassword: options.encrypt,
-      saveConfigOnDisk: true
+      saveConfigOnDisk: true,
+      forcePrompts: true
     });
 
     authConfig.getContext()
-    .then(() => {
-      console.log(colors.green('File saved'));
-    });
+      .then((context) => {
+        console.log(colors.green(`File saved to ${path.resolve(options.path)}`));
+      });
   });
 
 program.parse(process.argv);
