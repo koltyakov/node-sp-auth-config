@@ -43,6 +43,7 @@ npm install node-sp-auth-config -g
 ```
 
 ### Usage as CLI
+
 ```bash
 sp-auth init --path ./config/private.config.json
 sp-auth --help # for help about parameters
@@ -92,6 +93,11 @@ authConfig.getContext()
 
 #### Initiation parameters
 
-- configPath?: string;          // Path to auth config .json | Default is './config/private.json'
-- encryptPassword?: boolean;    // Encrypt password to a machine-bind hash | Default is 'true'
-- saveConfigOnDisk?: boolean;   // Save config .json to disk | Default is 'true'
+| Parameter | Default value | Description |
+| --- | --- | --- |
+| configPath | '`./config/private.json`' | Path to auth config `.json` |
+| encryptPassword | `true` | Encrypt password to a machine-bind hash |
+| saveConfigOnDisk | `true` | Save config `.json` to disk |
+| forcePrompts | `false` | Force parameters prompts |
+| defaultConfigPath | empty | Path to `.json` config, parameters from which are placed as defaults |
+| authOptions | empty | Any valid `node-sp-auth` options |
