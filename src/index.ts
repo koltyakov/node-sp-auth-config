@@ -42,6 +42,9 @@ export class AuthConfig {
       encryptPassword: typeof settings.encryptPassword !== 'undefined' ? settings.encryptPassword : true,
       saveConfigOnDisk: typeof settings.saveConfigOnDisk !== 'undefined' ? settings.saveConfigOnDisk : true
     };
+    if (typeof this.settings.encryptPassword === 'string') {
+      this.settings.encryptPassword = !((this.settings.encryptPassword as string).toLowerCase() === 'false');
+    }
   }
 
   public getContext = (): Promise<IAuthContext> => {
