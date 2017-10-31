@@ -20,6 +20,7 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
         return true;
       }
     }];
+    console.log('');
     inquirer.prompt(promptFor)
       .then((answers: inquirer.Answers) => {
         answersAll = {

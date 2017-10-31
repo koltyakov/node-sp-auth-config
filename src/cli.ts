@@ -42,8 +42,11 @@ program
     });
 
     authConfig.getContext()
-      .then((context) => {
-        console.log(colors.green(`File saved to ${path.resolve(options.path)}`));
+      .then(() => {
+        console.log(
+          '\n' + colors.green('File saved to') + ' ' +
+          colors.cyan(path.resolve(options.path))
+        );
       });
   });
 
