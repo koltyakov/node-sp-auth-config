@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/npm/dm/node-sp-auth-config.svg)](https://www.npmjs.com/package/node-sp-auth-config)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sharepoint-node/Lobby)
 
-`node-sp-auth-config` provides wizard-like approach for building and managing config files for [node-sp-auth](https://github.com/s-KaiNet/node-sp-auth) (Node.js to SharePoint unattended http authentication).
+`node-sp-auth-config` provides wizard-like approach for building and managing config files for [node-sp-auth](https://github.com/s-KaiNet/node-sp-auth) (Node.js to SharePoint unattended http authentication). Includes CLI for generating config files from command prompt.
 
 Versions supported:
 
@@ -34,6 +34,18 @@ Authentication options:
 
 ```bash
 npm install node-sp-auth-config --save
+```
+
+or install globally to use as CLI:
+
+```bash
+npm install node-sp-auth-config -g
+```
+
+### Usage as CLI
+```bash
+sp-auth init --path ./config/private.config.json
+sp-auth --help # for help about parameters
 ```
 
 ### Usage in TypeScript

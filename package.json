@@ -11,6 +11,9 @@
     "test": "ts-node ./tests/init.ts",
     "upgrade": "ncu --upgrade --upgradeAll && yarn upgrade"
   },
+  "bin": {
+    "sp-auth": "./dist/cli.js"
+  },
   "keywords": [
     "sharepoint",
     "config",
@@ -30,12 +33,14 @@
   "homepage": "https://github.com/koltyakov/node-sp-auth-config#readme",
   "dependencies": {
     "colors": "^1.1.2",
+    "commander": "^2.11.0",
     "cpass": "^2.0.3",
     "inquirer": "^3.3.0",
     "mkdirp": "^0.5.1",
     "node-sp-auth": "^2.2.9"
   },
   "devDependencies": {
+    "@types/commander": "^2.11.0",
     "@types/inquirer": "0.0.35",
     "@types/node": "^8.0.47",
     "del": "^3.0.0",
