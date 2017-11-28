@@ -6,8 +6,7 @@
   "typings": "./dist/index",
   "scripts": {
     "serve": "node ./dist/server",
-    "ts-serve": "ts-node ./src/server",
-    "build": "npm install && gulp tsc",
+    "build": "gulp tsc",
     "test": "ts-node ./tests/init.ts",
     "upgrade": "ncu --upgrade --upgradeAll && yarn upgrade"
   },
