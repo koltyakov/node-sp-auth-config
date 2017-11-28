@@ -5,48 +5,45 @@ import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-    let onPremiseFbaCredentials: IOnpremiseFbaCredentials = (authContext.authOptions as IOnpremiseFbaCredentials);
-    let promptFor: inquirer.Question[] = [
-      {
-        name: 'username',
-        message: 'User name',
-        type: 'input',
-        default: onPremiseFbaCredentials.username,
-        validate: (answer: string) => {
-          if (answer.length === 0) {
-            return false;
-          }
-          return true;
+  let onPremiseFbaCredentials: IOnpremiseFbaCredentials = (authContext.authOptions as IOnpremiseFbaCredentials);
+  let promptFor: inquirer.Question[] = [
+    {
+      name: 'username',
+      message: 'User name',
+      type: 'input',
+      default: onPremiseFbaCredentials.username,
+      validate: (answer: string) => {
+        if (answer.length === 0) {
+          return false;
         }
-      }, {
-        name: 'password',
-        message: 'Password',
-        type: 'password',
-        default: onPremiseFbaCredentials.password ? defaultPasswordMask : null,
-        validate: (answer: string) => {
-          if (answer.length === 0) {
-            return false;
-          }
-          return true;
-        }
+        return true;
       }
-    ];
-    inquirer.prompt(promptFor)
-      .then((answers: inquirer.Answers) => {
-        answersAll = {
-          ...answersAll,
-          ...answers,
-          password: answers.password === defaultPasswordMask
-            ? onPremiseFbaCredentials.password
-            : answers.password,
-          ...{
-            fba: true
-          }
-        };
-        resolve(answersAll);
-      });
-  });
+    }, {
+      name: 'password',
+      message: 'Password',
+      type: 'password',
+      default: onPremiseFbaCredentials.password ? defaultPasswordMask : null,
+      validate: (answer: string) => {
+        if (answer.length === 0) {
+          return false;
+        }
+        return true;
+      }
+    }
+  ];
+  return inquirer.prompt(promptFor)
+    .then((answers: inquirer.Answers) => {
+      return {
+        ...answersAll,
+        ...answers,
+        password: answers.password === defaultPasswordMask
+          ? onPremiseFbaCredentials.password
+          : answers.password,
+        ...{
+          fba: true
+        }
+      };
+    });
 };
 
 export default wizard;

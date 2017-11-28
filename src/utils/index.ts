@@ -39,7 +39,7 @@ export const convertSettingsToAuthContext = (configObject: IAuthContextSettings)
 };
 
 export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfigSettings): Promise<any> => {
-  return new Promise((res: typeof Promise.resolve, rej: typeof Promise.reject) => {
+  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
     let configDataJson = convertAuthContextToSettings(authContext, settings);
     let saveFolderPath = path.dirname(settings.configPath);
     mkdirp(saveFolderPath, (err: any) => {
@@ -50,9 +50,9 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
       fs.writeFile(settings.configPath, JSON.stringify(configDataJson, null, 2), 'utf8', (err: any) => {
         if (err) {
           console.log(err);
-          return rej(err);
+          return reject(err);
         }
-        res();
+        resolve();
       });
     });
   });

@@ -5,45 +5,42 @@ import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-    let userCredentials: IUserCredentials = (authContext.authOptions as IUserCredentials);
-    let promptFor: inquirer.Question[] = [
-      {
-        name: 'username',
-        message: 'User name',
-        type: 'input',
-        default: userCredentials.username,
-        validate: (answer: string) => {
-          if (answer.length === 0) {
-            return false;
-          }
-          return true;
+  let userCredentials: IUserCredentials = (authContext.authOptions as IUserCredentials);
+  let promptFor: inquirer.Question[] = [
+    {
+      name: 'username',
+      message: 'User name',
+      type: 'input',
+      default: userCredentials.username,
+      validate: (answer: string) => {
+        if (answer.length === 0) {
+          return false;
         }
-      }, {
-        name: 'password',
-        message: 'Password',
-        type: 'password',
-        default: userCredentials.password ? defaultPasswordMask : null,
-        validate: (answer: string) => {
-          if (answer.length === 0) {
-            return false;
-          }
-          return true;
-        }
+        return true;
       }
-    ];
-    inquirer.prompt(promptFor)
-      .then((answers: inquirer.Answers) => {
-        answersAll = {
-          ...answersAll,
-          ...answers,
-          password: answers.password === defaultPasswordMask
-            ? userCredentials.password
-            : answers.password
-        };
-        resolve(answersAll);
-      });
-  });
+    }, {
+      name: 'password',
+      message: 'Password',
+      type: 'password',
+      default: userCredentials.password ? defaultPasswordMask : null,
+      validate: (answer: string) => {
+        if (answer.length === 0) {
+          return false;
+        }
+        return true;
+      }
+    }
+  ];
+  return inquirer.prompt(promptFor)
+    .then((answers: inquirer.Answers) => {
+      return {
+        ...answersAll,
+        ...answers,
+        password: answers.password === defaultPasswordMask
+          ? userCredentials.password
+          : answers.password
+      };
+    });
 };
 
 export default wizard;

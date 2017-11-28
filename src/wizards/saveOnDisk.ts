@@ -4,35 +4,31 @@ import { convertAuthContextToSettings, convertSettingsToAuthContext, saveConfigO
 import { IAuthContext, IAuthConfigSettings } from '../interfaces';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-    if (typeof settings.saveConfigOnDisk === 'undefined') {
-      let promptFor: inquirer.Question[] = [{
-        name: 'save',
-        message: 'Save on disk?',
-        type: 'confirm'
-      }];
-      inquirer.prompt(promptFor)
-        .then((answers: inquirer.Answers) => {
-          if (answers.save) {
-            return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings)
-              .then(() => {
-                resolve(answersAll);
-              });
-          } else {
-            resolve(answersAll);
-          }
-        });
-    } else {
-      if (settings.saveConfigOnDisk) {
-        return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings)
-          .then(() => {
-            resolve(answersAll);
-          });
-      } else {
-        resolve(answersAll);
-      }
-    }
-  });
+  if (typeof settings.saveConfigOnDisk === 'undefined') {
+    let promptFor: inquirer.Question[] = [{
+      name: 'save',
+      message: 'Save on disk?',
+      type: 'confirm'
+    }];
+    return inquirer.prompt(promptFor)
+      .then((answers: inquirer.Answers) => {
+        if (answers.save) {
+          return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings)
+            .then(() => {
+              return answersAll;
+            });
+        } else {
+          return answersAll;
+        }
+      });
+  } else if (settings.saveConfigOnDisk) {
+    return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings)
+      .then(() => {
+        return answersAll;
+      });
+  } else {
+    return new Promise(r => r(answersAll));
+  }
 };
 
 export default wizard;

@@ -13,42 +13,45 @@ import adfsUserWizard from './credentials/AdfsUser';
 import onDemandWizard from './credentials/OnDemand';
 // <<< Strategies wizards
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-    let promptFor: inquirer.Question[] = [];
-
-    // Ask for strategy specific parameters
-    promptFor = [];
-    switch (answersAll.strategy) {
-      case 'OnPremiseAddinCredentials':
-        resolve(onPremiseAddinWizard(authContext, answersAll));
-        break;
-      case 'OnpremiseUserCredentials':
-        resolve(onPremiseUserWizard(authContext, answersAll));
-        break;
-      case 'OnpremiseTmgCredentials':
-        resolve(onPremiseTmgWizard(authContext, answersAll));
-        break;
-      case 'OnpremiseFbaCredentials':
-        resolve(onPremiseFbaWizard(authContext, answersAll));
-        break;
-      case 'OnlineAddinCredentials':
-        resolve(onlineAddinWizard(authContext, answersAll));
-        break;
-      case 'UserCredentials':
-        resolve(onlineUserWizard(authContext, answersAll));
-        break;
-      case 'AdfsUserCredentials':
-        resolve(adfsUserWizard(authContext, answersAll));
-        break;
-      case 'OnDemandCredentials':
-        resolve(onDemandWizard(authContext, answersAll));
-        break;
-      default:
-        resolve(answersAll);
-        break;
-    }
-  });
+const wizard = (
+  authContext: IAuthContext,
+  answersAll: inquirer.Answers = {},
+  settings: IAuthConfigSettings = {}
+): Promise<inquirer.Answers> => {
+  let promptFor: inquirer.Question[] = [];
+  let answers: Promise<inquirer.Answers>;
+  // Ask for strategy specific parameters
+  promptFor = [];
+  switch (answersAll.strategy) {
+    case 'OnPremiseAddinCredentials':
+      answers = onPremiseAddinWizard(authContext, answersAll);
+      break;
+    case 'OnpremiseUserCredentials':
+      answers = onPremiseUserWizard(authContext, answersAll);
+      break;
+    case 'OnpremiseTmgCredentials':
+      answers = onPremiseTmgWizard(authContext, answersAll);
+      break;
+    case 'OnpremiseFbaCredentials':
+      answers = onPremiseFbaWizard(authContext, answersAll);
+      break;
+    case 'OnlineAddinCredentials':
+      answers = onlineAddinWizard(authContext, answersAll);
+      break;
+    case 'UserCredentials':
+      answers = onlineUserWizard(authContext, answersAll);
+      break;
+    case 'AdfsUserCredentials':
+      answers = adfsUserWizard(authContext, answersAll);
+      break;
+    case 'OnDemandCredentials':
+      answers = onDemandWizard(authContext, answersAll);
+      break;
+    default:
+      answers = new Promise(r => r(answersAll));
+      break;
+  }
+  return answers;
 };
 
 export default wizard;

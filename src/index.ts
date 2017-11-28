@@ -51,7 +51,7 @@ export class AuthConfig {
     // console.log('Config path: ' + this.settings.configPath);
     return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
       return this.checkForPrompts()
-        .then(checkPromptsResponse => {
+        .then((checkPromptsResponse): Promise<IAuthContext> => {
           let authContext: IAuthContext = {
             ...checkPromptsResponse.authContext
           };
@@ -59,12 +59,12 @@ export class AuthConfig {
           if (!checkPromptsResponse.needPrompts) {
 
             if (checkPromptsResponse.needSave) {
-              saveConfigOnDisk(authContext, this.settings)
+              return saveConfigOnDisk(authContext, this.settings)
                 .then(() => {
-                  resolve(authContext);
+                  return resolve(authContext);
                 });
             } else {
-              resolve(authContext);
+              return resolve(authContext);
             }
 
           } else {
@@ -189,15 +189,20 @@ export class AuthConfig {
               if (checkObj.needPrompts) {
                 resolve(checkObj);
               } else {
-                this.tryAuth(checkObj.authContext)
-                  .then(() => {
-                    checkObj.needPrompts = false;
-                    resolve(checkObj);
-                  })
-                  .catch((_error: any) => {
-                    checkObj.needPrompts = true;
-                    resolve(checkObj);
-                  });
+                try {
+                  this.tryAuth(checkObj.authContext)
+                    .then(() => {
+                      checkObj.needPrompts = false;
+                      resolve(checkObj);
+                    })
+                    .catch((_error: any) => {
+                      checkObj.needPrompts = true;
+                      resolve(checkObj);
+                    });
+                } catch (ex) {
+                  checkObj.needPrompts = true;
+                  resolve(checkObj);
+                }
               }
             }
           });
