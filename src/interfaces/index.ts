@@ -16,6 +16,7 @@ export interface IAuthContext {
   siteUrl: string;
   strategy?: StrategyCode;
   authOptions: IAuthOptions;
+  custom?: any;
 }
 
 export interface IAuthContextSettings {

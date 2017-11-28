@@ -32,6 +32,7 @@ export class AuthConfig {
   private targets: string[];
   private strategies: IStrategyDictItem[];
   private context: IAuthContextSettings;
+  private customData: any;
 
   constructor (settings: IAuthConfigSettings = {}) {
     this.strategies = getStrategies();
@@ -49,49 +50,47 @@ export class AuthConfig {
 
   public getContext = (): Promise<IAuthContext> => {
     // console.log('Config path: ' + this.settings.configPath);
-    return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-      return this.checkForPrompts()
-        .then((checkPromptsResponse): Promise<IAuthContext> => {
-          let authContext: IAuthContext = {
-            ...checkPromptsResponse.authContext
-          };
+    return this.checkForPrompts()
+      .then((checkPromptsResponse): Promise<IAuthContext> => {
+        let authContext: IAuthContext = {
+          ...checkPromptsResponse.authContext
+        };
 
-          if (!checkPromptsResponse.needPrompts) {
+        if (!checkPromptsResponse.needPrompts) {
 
-            if (checkPromptsResponse.needSave) {
-              return saveConfigOnDisk(authContext, this.settings)
-                .then(() => {
-                  return resolve(authContext);
-                });
-            } else {
-              return resolve(authContext);
-            }
-
+          if (checkPromptsResponse.needSave) {
+            return saveConfigOnDisk(authContext, this.settings)
+              .then(_ => authContext);
           } else {
-
-            // Step 1: Require SharePoint URL
-            return siteUrlWizard(authContext, {}, this.settings)
-              .then((answersResult) => {
-                // Step 2: SharePoint Online/OnPremise autodetection
-                return strategyWizard(authContext, answersResult, this.settings);
-              })
-              .then((answersResult) => {
-                // Step 3: Ask for strategy specific parameters
-                return credentialsWizard(authContext, answersResult, this.settings);
-              })
-              .then((answersResult) => {
-                // Step 4: Save on disk
-                return saveOnDiskWizard(authContext, answersResult, this.settings);
-              })
-              .then((answersResult) => {
-                // Return wizard data
-                return resolve(convertSettingsToAuthContext(answersResult as any));
-              });
-
+            return new Promise(r => r(authContext));
           }
-        });
 
-    });
+        } else {
+
+          // Step 1: Require SharePoint URL
+          return siteUrlWizard(authContext, {}, this.settings)
+            .then((answersResult) => {
+              // Step 2: SharePoint Online/OnPremise autodetection
+              return strategyWizard(authContext, answersResult, this.settings);
+            })
+            .then((answersResult) => {
+              // Step 3: Ask for strategy specific parameters
+              return credentialsWizard(authContext, answersResult, this.settings);
+            })
+            .then((answersResult) => {
+              // Step 4: Save on disk
+              if (typeof this.customData !== 'undefined') {
+                answersResult.custom = this.customData;
+              }
+              return saveOnDiskWizard(authContext, answersResult, this.settings);
+            })
+            .then((answersResult) => {
+              // Return wizard data
+              return convertSettingsToAuthContext(answersResult as any);
+            });
+
+        }
+      });
   }
 
   private tryAuth = (authContext: IAuthContext): Promise<IAuthResponse> => {
@@ -107,106 +106,102 @@ export class AuthConfig {
             if (exists) {
               jsonRawData = require(path.resolve(filePath));
             }
-            resolve({
-              exists,
-              jsonRawData
-            });
+            if (typeof jsonRawData.custom !== 'undefined') {
+              this.customData = jsonRawData.custom;
+              delete jsonRawData.custom;
+            }
+            resolve({ exists, jsonRawData });
           });
         } else {
-          resolve({
-            exists: true,
-            jsonRawData: jsonData
-          });
+          resolve({ exists: true, jsonRawData: jsonData });
         }
       });
     };
     let runCheckForPrompts = (checkObject: ICheckPromptsResponse): Promise<ICheckPromptsResponse> => {
-      return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
-        getJsonContent(this.settings.configPath, this.settings.authOptions)
-          .then(check => {
-            checkObject.needPrompts = !check.exists;
-            checkObject.jsonRawData = check.jsonRawData;
-            return checkObject;
-          })
-          .then(checkObj => {
-            if (typeof this.settings.defaultConfigPath !== 'undefined') {
-              return getJsonContent(this.settings.defaultConfigPath)
-                .then(check => {
-                  checkObj.jsonRawData = {
-                    ...check.jsonRawData,
-                    ...checkObj.jsonRawData
-                  };
-                  return checkObject;
-                });
-            } else {
-              return checkObj;
-            }
-          })
-          .then(checkObj => {
+      return getJsonContent(this.settings.configPath, this.settings.authOptions)
+        .then(check => {
+          checkObject.needPrompts = !check.exists;
+          checkObject.jsonRawData = check.jsonRawData;
+          return checkObject;
+        })
+        .then(checkObj => {
+          if (typeof this.settings.defaultConfigPath !== 'undefined') {
+            return getJsonContent(this.settings.defaultConfigPath)
+              .then(check => {
+                checkObj.jsonRawData = {
+                  ...check.jsonRawData,
+                  ...checkObj.jsonRawData
+                };
+                return checkObject;
+              });
+          } else {
+            return checkObj;
+          }
+        })
+        .then(checkObj => {
 
-            this.context = (checkObj.jsonRawData as IAuthContextSettings);
+          this.context = (checkObj.jsonRawData as IAuthContextSettings);
 
-            let withPassword: boolean;
-            let strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
-              return strategy.id === this.context.strategy;
-            });
-            if (strategies.length === 1) {
-              withPassword = strategies[0].withPassword;
-            } else {
-              withPassword = typeof this.context.password !== 'undefined';
-            }
-
-            // Strategies with password
-            if (withPassword) {
-              let initialPassword = `${this.context.password || ''}`;
-              if (this.context.password === '' || typeof this.context.password === 'undefined') {
-                checkObj.needPrompts = true;
-              } else {
-                this.context.password = cpass.decode(this.context.password);
-                let decodedPassword = this.context.password;
-                let encodedPassword = cpass.encode(decodedPassword);
-                if (initialPassword === decodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
-                  checkObj.needSave = true;
-                }
-              }
-            }
-
-            checkObj.authContext = convertSettingsToAuthContext(this.context);
-
-            // Force prompts
-            if (this.settings.forcePrompts === true) {
-              checkObj.needPrompts = true;
-            }
-
-            // Verify strategy parameters
-            if (strategies.length === 1) {
-              if (!checkObj.needPrompts) {
-                checkObj.needPrompts = !strategies[0].verifyCallback(this.context.siteUrl, this.context);
-              }
-              resolve(checkObj);
-            } else {
-              // No strategies found
-              if (checkObj.needPrompts) {
-                resolve(checkObj);
-              } else {
-                try {
-                  this.tryAuth(checkObj.authContext)
-                    .then(() => {
-                      checkObj.needPrompts = false;
-                      resolve(checkObj);
-                    })
-                    .catch((_error: any) => {
-                      checkObj.needPrompts = true;
-                      resolve(checkObj);
-                    });
-                } catch (ex) {
-                  checkObj.needPrompts = true;
-                  resolve(checkObj);
-                }
-              }
-            }
+          let withPassword: boolean;
+          let strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
+            return strategy.id === this.context.strategy;
           });
-      });
+          if (strategies.length === 1) {
+            withPassword = strategies[0].withPassword;
+          } else {
+            withPassword = typeof this.context.password !== 'undefined';
+          }
+
+          // Strategies with password
+          if (withPassword) {
+            let initialPassword = `${this.context.password || ''}`;
+            if (this.context.password === '' || typeof this.context.password === 'undefined') {
+              checkObj.needPrompts = true;
+            } else {
+              this.context.password = cpass.decode(this.context.password);
+              let decodedPassword = this.context.password;
+              let encodedPassword = cpass.encode(decodedPassword);
+              if (initialPassword === decodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
+                checkObj.needSave = true;
+              }
+            }
+          }
+
+          checkObj.authContext = convertSettingsToAuthContext(this.context);
+
+          // Force prompts
+          if (this.settings.forcePrompts === true) {
+            checkObj.needPrompts = true;
+          }
+
+          // Verify strategy parameters
+          if (strategies.length === 1) {
+            if (!checkObj.needPrompts) {
+              checkObj.needPrompts = !strategies[0].verifyCallback(this.context.siteUrl, this.context);
+            }
+            return checkObj;
+          } else {
+            // No strategies found
+            if (checkObj.needPrompts) {
+              return checkObj;
+            } else {
+              try {
+                return this.tryAuth(checkObj.authContext)
+                  .then(() => {
+                    checkObj.needPrompts = false;
+                    return checkObj;
+                  })
+                  .catch((_error: any) => {
+                    checkObj.needPrompts = true;
+                    return checkObj;
+                  });
+              } catch (ex) {
+                checkObj.needPrompts = true;
+                return checkObj;
+              }
+            }
+          }
+        });
     };
     let checkPromptsObject: ICheckPromptsResponse = {
       needPrompts: true,

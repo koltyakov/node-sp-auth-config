@@ -12,7 +12,8 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
   let plainContext: IAuthContextSettings = {
     siteUrl: authContext.siteUrl,
     strategy: authContext.strategy,
-    ...authContext.authOptions
+    ...authContext.authOptions,
+    custom: authContext.custom
   };
   if (typeof password !== 'undefined' && settings.encryptPassword) {
     let decodedPassword = cpass.decode(password);
@@ -31,10 +32,12 @@ export const convertSettingsToAuthContext = (configObject: IAuthContextSettings)
     strategy: configObject.strategy,
     authOptions: {
       ...(configObject as any)
-    }
+    },
+    custom: configObject.custom
   };
   delete (formattedContext.authOptions as any).siteUrl;
   delete (formattedContext.authOptions as any).strategy;
+  delete (formattedContext.authOptions as any).custom;
   return formattedContext;
 };
 
