@@ -17,6 +17,7 @@ export interface IAuthContext {
   strategy?: StrategyCode;
   authOptions: IAuthOptions;
   custom?: any;
+  settings?: IAuthConfigSettings;
 }
 
 export interface IAuthContextSettings {

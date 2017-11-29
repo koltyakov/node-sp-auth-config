@@ -79,14 +79,7 @@
     "@types/bluebird" "*"
     "@types/request" "*"
 
-"@types/request@*":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@types/request/-/request-2.0.8.tgz#424d3de255868107ed4dd6695c65c5f1766aba80"
-  dependencies:
-    "@types/form-data" "*"
-    "@types/node" "*"
-
-"@types/request@0.0.31":
+"@types/request@*", "@types/request@0.0.31":
   version "0.0.31"
   resolved "https://registry.yarnpkg.com/@types/request/-/request-0.0.31.tgz#e9e77661f76c596a6fd0edba622005667171baeb"
   dependencies:

@@ -53,7 +53,8 @@ export class AuthConfig {
     return this.checkForPrompts()
       .then((checkPromptsResponse): Promise<IAuthContext> => {
         let authContext: IAuthContext = {
-          ...checkPromptsResponse.authContext
+          ...checkPromptsResponse.authContext,
+          settings: this.settings
         };
 
         if (!checkPromptsResponse.needPrompts) {
