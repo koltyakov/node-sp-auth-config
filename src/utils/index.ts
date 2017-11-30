@@ -32,9 +32,11 @@ export const convertSettingsToAuthContext = (configObject: IAuthContextSettings)
     strategy: configObject.strategy,
     authOptions: {
       ...(configObject as any)
-    },
-    custom: configObject.custom
+    }
   };
+  if (configObject.custom) {
+    formattedContext.custom = configObject.custom;
+  }
   delete (formattedContext.authOptions as any).siteUrl;
   delete (formattedContext.authOptions as any).strategy;
   delete (formattedContext.authOptions as any).custom;

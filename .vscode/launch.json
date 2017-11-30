@@ -9,7 +9,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/ts-node/dist/_bin.js",
-      "args": ["${workspaceRoot}/tests/init.ts"],
+      "args": ["${relativeFile}"],
       "cwd": "${workspaceRoot}",
       "protocol": "inspector"
     }
