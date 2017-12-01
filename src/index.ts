@@ -87,7 +87,7 @@ export class AuthConfig {
             })
             .then((answersResult) => {
               // Return wizard data
-              return convertSettingsToAuthContext(answersResult as any);
+              return convertSettingsToAuthContext(answersResult as any, this.settings);
             });
 
         }

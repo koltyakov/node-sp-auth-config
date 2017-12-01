@@ -26,16 +26,18 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
   return plainContext;
 };
 
-export const convertSettingsToAuthContext = (configObject: IAuthContextSettings): IAuthContext => {
+export const convertSettingsToAuthContext = (configObject: IAuthContextSettings, settings: IAuthConfigSettings = {}): IAuthContext => {
   let formattedContext: IAuthContext = {
     siteUrl: configObject.siteUrl || '',
     strategy: configObject.strategy,
     authOptions: {
       ...(configObject as any)
-    }
+    },
+    settings,
+    custom: configObject.custom
   };
-  if (configObject.custom) {
-    formattedContext.custom = configObject.custom;
+  if (typeof formattedContext.custom === 'undefined') {
+    delete formattedContext.custom;
   }
   delete (formattedContext.authOptions as any).siteUrl;
   delete (formattedContext.authOptions as any).strategy;
