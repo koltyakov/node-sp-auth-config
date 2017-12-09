@@ -105,7 +105,11 @@ export class AuthConfig {
           fs.exists(filePath, (exists: boolean) => {
             let jsonRawData: any = {};
             if (exists) {
-              jsonRawData = require(path.resolve(filePath));
+              try {
+                jsonRawData = JSON.parse(fs.readFileSync(path.resolve(filePath)).toString());
+              } catch (ex) {
+                //
+              }
             }
             if (typeof jsonRawData.custom !== 'undefined') {
               this.customData = jsonRawData.custom;
