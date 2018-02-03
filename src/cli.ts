@@ -18,6 +18,7 @@ program
   .description('writes new file with node-sp-auth credentials into the file system')
   .option('-p, --path [value]', 'relative path to file which will store your credentials, required')
   .option('-e, --encrypt [true, false]', 'specify false if you don\'t need to encrypt password in the file, optional, default is true', true)
+  .option('-k, --masterkey [value]', 'optional key used to encrypt and decrypt your sensitive data (passwords), by default unique machine id is used', null)
   .action((options: ICliParameters) => {
     if (typeof options.path === 'undefined') {
       console.log(
@@ -38,7 +39,8 @@ program
       configPath: options.path,
       encryptPassword: options.encrypt,
       saveConfigOnDisk: true,
-      forcePrompts: true
+      forcePrompts: true,
+      masterKey: options.masterkey
     });
 
     authConfig.getContext()

@@ -5,8 +5,6 @@ import { Cpass } from 'cpass';
 
 import { IAuthContext, IAuthContextSettings, IAuthConfigSettings } from '../interfaces';
 
-const cpass = new Cpass();
-
 export const convertAuthContextToSettings = (authContext: IAuthContext, settings: IAuthConfigSettings = {}): IAuthContextSettings => {
   let password = (authContext.authOptions as any).password;
   let plainContext: IAuthContextSettings = {
@@ -16,6 +14,7 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
     custom: authContext.custom
   };
   if (typeof password !== 'undefined' && settings.encryptPassword) {
+    let cpass = new Cpass(settings.masterKey);
     let decodedPassword = cpass.decode(password);
     let encodedPassword = cpass.encode(decodedPassword);
     plainContext = {

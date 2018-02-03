@@ -24,8 +24,6 @@ import {
   IAuthConfigSettings, ICheckPromptsResponse
 } from './interfaces';
 
-const cpass = new Cpass();
-
 export class AuthConfig {
 
   private settings: IAuthConfigSettings;
@@ -33,6 +31,7 @@ export class AuthConfig {
   private strategies: IStrategyDictItem[];
   private context: IAuthContextSettings;
   private customData: any;
+  private cpass: Cpass;
 
   constructor (settings: IAuthConfigSettings = {}) {
     this.strategies = getStrategies();
@@ -46,6 +45,7 @@ export class AuthConfig {
     if (typeof this.settings.encryptPassword === 'string') {
       this.settings.encryptPassword = !((this.settings.encryptPassword as string).toLowerCase() === 'false');
     }
+    this.cpass = new Cpass(settings.masterKey);
   }
 
   public getContext = (): Promise<IAuthContext> => {
@@ -163,9 +163,9 @@ export class AuthConfig {
             if (this.context.password === '' || typeof this.context.password === 'undefined') {
               checkObj.needPrompts = true;
             } else {
-              this.context.password = cpass.decode(this.context.password);
+              this.context.password = this.cpass.decode(this.context.password);
               let decodedPassword = this.context.password;
-              let encodedPassword = cpass.encode(decodedPassword);
+              let encodedPassword = this.cpass.encode(decodedPassword);
               if (initialPassword === decodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
                 checkObj.needSave = true;
               }
