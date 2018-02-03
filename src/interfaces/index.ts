@@ -41,6 +41,7 @@ export interface IAuthConfigSettings {
   saveConfigOnDisk?: boolean;
   authOptions?: IAuthOptions;
   forcePrompts?: boolean;
+  masterKey?: string;
 }
 
 export interface ICheckPromptsResponse {
@@ -53,4 +54,5 @@ export interface ICheckPromptsResponse {
 export interface ICliParameters {
   path: string;
   encrypt?: boolean;
+  masterkey?: string;
 }
