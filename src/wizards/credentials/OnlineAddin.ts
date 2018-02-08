@@ -2,6 +2,7 @@ import * as inquirer from 'inquirer';
 
 import { IOnlineAddinCredentials } from 'node-sp-auth';
 import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
+import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   let onlineAddinCredentials: IOnlineAddinCredentials = (authContext.authOptions as IOnlineAddinCredentials);
@@ -20,8 +21,8 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
     }, {
       name: 'clientSecret',
       message: 'clientSecret',
-      type: 'input',
-      default: onlineAddinCredentials.clientSecret,
+      type: 'password',
+      default: onlineAddinCredentials.clientSecret ? defaultPasswordMask : null,
       validate: (answer: string) => {
         if (answer.length === 0) {
           return false;
@@ -34,7 +35,10 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
     .then((answers: inquirer.Answers) => {
       return {
         ...answersAll,
-        ...answers
+        ...answers,
+        clientSecret: answers.clientSecret === defaultPasswordMask
+          ? onlineAddinCredentials.clientSecret
+          : answers.clientSecret
       };
     });
 };

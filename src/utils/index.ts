@@ -6,7 +6,8 @@ import { Cpass } from 'cpass';
 import { IAuthContext, IAuthContextSettings, IAuthConfigSettings } from '../interfaces';
 
 export const convertAuthContextToSettings = (authContext: IAuthContext, settings: IAuthConfigSettings = {}): IAuthContextSettings => {
-  let password = (authContext.authOptions as any).password;
+  let passwordPropertyName = getHiddenPropertyName(authContext.authOptions as any);
+  let password = (authContext.authOptions as any)[passwordPropertyName];
   let plainContext: IAuthContextSettings = {
     siteUrl: authContext.siteUrl,
     strategy: authContext.strategy,
@@ -18,9 +19,9 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
     let decodedPassword = cpass.decode(password);
     let encodedPassword = cpass.encode(decodedPassword);
     plainContext = {
-      ...plainContext,
-      password: encodedPassword
+      ...plainContext
     };
+    plainContext[passwordPropertyName] = encodedPassword;
   }
   return plainContext;
 };
@@ -65,3 +66,14 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
 };
 
 export const defaultPasswordMask: string = '********';
+
+export const getHiddenPropertyName = (data: { [key: string]: string }): string => {
+  if (data.password) {
+    return 'password';
+  }
+  if (data.clientSecret) {
+    return 'clientSecret';
+  }
+
+  return undefined;
+};
