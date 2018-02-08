@@ -4,7 +4,7 @@ import { Cpass } from 'cpass';
 import * as spauth from 'node-sp-auth';
 
 // Utils
-import { convertSettingsToAuthContext, saveConfigOnDisk } from './utils';
+import { convertSettingsToAuthContext, saveConfigOnDisk, getHiddenPropertyName } from './utils';
 
 // Step wizards
 import siteUrlWizard from './wizards/siteUrl';
@@ -151,21 +151,23 @@ export class AuthConfig {
           let strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
             return strategy.id === this.context.strategy;
           });
+
+          let passwordPropertyName = getHiddenPropertyName(this.context);
+
           if (strategies.length === 1) {
             withPassword = strategies[0].withPassword;
           } else {
-            withPassword = typeof this.context.password !== 'undefined';
+            withPassword = typeof this.context[passwordPropertyName] !== 'undefined';
           }
 
           // Strategies with password
           if (withPassword) {
-            let initialPassword = `${this.context.password || ''}`;
-            if (this.context.password === '' || typeof this.context.password === 'undefined') {
+            let initialPassword = `${this.context[passwordPropertyName] || ''}`;
+            if (!this.context[passwordPropertyName]) {
               checkObj.needPrompts = true;
             } else {
-              this.context.password = this.cpass.decode(this.context.password);
-              let decodedPassword = this.context.password;
-              let encodedPassword = this.cpass.encode(decodedPassword);
+              this.context[passwordPropertyName] = this.cpass.decode(this.context[passwordPropertyName]);
+              let decodedPassword = this.context[passwordPropertyName];
               if (initialPassword === decodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
                 checkObj.needSave = true;
               }

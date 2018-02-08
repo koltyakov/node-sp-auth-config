@@ -42,7 +42,7 @@ export const getStrategies = (): IStrategyDictItem[] => {
     }, {
       id: 'OnlineAddinCredentials',
       name: 'Add-In only permissions',
-      withPassword: false,
+      withPassword: true,
       target: ['Online'],
       verifyCallback: (...args: any[]) => {
         return spauth.isAddinOnlyOnline(args[1]);
