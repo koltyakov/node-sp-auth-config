@@ -1,6 +1,7 @@
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as url from 'url';
 import { Cpass } from 'cpass';
 
 import { IAuthContext, IAuthContextSettings, IAuthConfigSettings } from '../interfaces';
@@ -76,4 +77,17 @@ export const getHiddenPropertyName = (data: { [key: string]: string }): string =
   }
 
   return undefined;
+};
+
+export const isOnPrem = (siteUrl: string): boolean => {
+  let host: string = (url.parse(siteUrl.toLocaleLowerCase())).host;
+  return [
+    '.sharepoint.com',
+    '.sharepoint.cn',
+    '.sharepoint.de',
+    '.sharepoint-mil.us',
+    '.sharepoint.us'
+  ]
+    .filter(uri => host.indexOf(uri) !== -1)
+    .length === 0;
 };

@@ -2,15 +2,13 @@ import * as inquirer from 'inquirer';
 
 import { IAuthContext, IAuthConfigSettings, IStrategyDictItem } from '../interfaces';
 import { getStrategies } from '../config';
+import { isOnPrem } from '../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   let promptFor: inquirer.Question[] = [];
 
   // SharePoint Online/OnPremise autodetection
-  let target: ('Online' | 'OnPremise') = (
-    answersAll.siteUrl.toLowerCase().indexOf('.sharepoint.com') !== -1 ||
-    answersAll.siteUrl.toLowerCase().indexOf('.sharepoint.cn') !== -1
-  ) ? 'Online' : 'OnPremise';
+  let target: ('Online' | 'OnPremise') = isOnPrem(answersAll.siteUrl) ? 'OnPremise' : 'Online';
   let strategies: IStrategyDictItem[] = getStrategies().filter((strategy: IStrategyDictItem) => {
     return strategy.target.indexOf(target) !== -1;
   });
