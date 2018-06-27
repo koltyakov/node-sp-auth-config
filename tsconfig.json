@@ -3,7 +3,6 @@
     "target": "es5",
     "module": "commonjs",
     "lib": ["es2017"],
-    "rootDir": "src",
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",
@@ -14,8 +13,13 @@
     "types": ["node"],
     "outDir": "dist"
   },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "tests"
   ]
 }

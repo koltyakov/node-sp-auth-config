@@ -47,7 +47,7 @@ export const convertSettingsToAuthContext = (configObject: IAuthContextSettings,
 };
 
 export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfigSettings): Promise<any> => {
-  return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
+  return new Promise((resolve, reject) => {
     let configDataJson = convertAuthContextToSettings(authContext, settings);
     let saveFolderPath = path.dirname(settings.configPath);
     mkdirp(saveFolderPath, (err: any) => {
