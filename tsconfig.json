@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
-    "lib": [ "es2017" ],
+    "lib": ["es2017"],
+    "rootDir": "src",
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",
@@ -10,6 +11,11 @@
     "removeComments": true,
     "newLine": "LF",
     "skipLibCheck": true,
-    "types": [ "node" ]
-  }
+    "types": ["node"],
+    "outDir": "dist"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
