@@ -6,8 +6,7 @@
   "typings": "./dist/index",
   "scripts": {
     "build": "rm -rf ./dist && tsc -p .",
-    "test": "ts-node ./tests/init.ts",
-    "test:lib": "ts-node ./tests/init.ts",
+    "test:lib": "ts-node ./test/init.ts",
     "test:cli": "ts-node ./src/cli.ts"
   },
   "bin": {
