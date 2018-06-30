@@ -1,7 +1,9 @@
-.vscode
-/tests
-/config
-npm-debug.log
-/src
-/docs
-!/dist
+!dist/
+.vscode/
+.github/
+test/
+config/
+src/
+docs/
+tsconfig.json
+tslint.json

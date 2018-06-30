@@ -1,5 +1,5 @@
 node_modules
-/config/*
+config/**/private.*
 debug.log
 npm-debug.*
 dist
