@@ -51,8 +51,11 @@ export interface ICheckPromptsResponse {
   jsonRawData?: any;
 }
 
-export interface ICliParameters {
+export interface ICliInitParameters {
   path: string;
   encrypt?: boolean;
   masterkey?: string;
+  format?: boolean;
 }
+
+export interface ICliReadParameters extends ICliInitParameters {}

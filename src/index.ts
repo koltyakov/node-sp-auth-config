@@ -100,7 +100,7 @@ export class AuthConfig {
 
   private checkForPrompts = (): Promise<ICheckPromptsResponse> => {
     let getJsonContent = (filePath: string, jsonData?: IAuthOptions): Promise<any> => {
-      return new Promise((resolve: typeof Promise.resolve, reject: typeof Promise.reject) => {
+      return new Promise((resolve, reject) => {
         if (typeof jsonData === 'undefined') {
           fs.exists(filePath, (exists: boolean) => {
             let jsonRawData: any = {};
