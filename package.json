@@ -1,7 +1,7 @@
 {
   "name": "node-sp-auth-config",
   "description": "Config options builder for node-sp-auth (SharePoint Authentication in Node.js)",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "main": "./dist/index.js",
   "typings": "./dist/index",
   "scripts": {
@@ -35,15 +35,15 @@
     "cpass": "^2.0.4",
     "inquirer": "^6.0.0",
     "mkdirp": "^0.5.1",
-    "node-sp-auth": "^2.5.2"
+    "node-sp-auth": "^2.5.4"
   },
   "devDependencies": {
     "@types/colors": "^1.2.1",
     "@types/commander": "^2.12.2",
     "@types/inquirer": "^0.0.42",
-    "@types/node": "^10.5.1",
+    "@types/node": "^10.5.2",
     "ts-node": "^7.0.0",
-    "tslint": "^5.10.0",
+    "tslint": "^5.11.0",
     "tslint-config-standard": "^7.1.0",
     "typescript": "^2.9.2"
   }
