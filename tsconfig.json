@@ -7,6 +7,7 @@
     "declaration": true,
     "moduleResolution": "node",
     "noImplicitAny": false,
+    "strictNullChecks": false,
     "removeComments": true,
     "newLine": "LF",
     "skipLibCheck": true,
