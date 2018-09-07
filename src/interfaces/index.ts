@@ -42,6 +42,7 @@ export interface IAuthConfigSettings {
   authOptions?: IAuthOptions;
   forcePrompts?: boolean;
   masterKey?: string;
+  headlessMode?: boolean;
 }
 
 export interface ICheckPromptsResponse {
