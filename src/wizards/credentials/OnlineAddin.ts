@@ -5,8 +5,8 @@ import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let onlineAddinCredentials: IOnlineAddinCredentials = (authContext.authOptions as IOnlineAddinCredentials);
-  let promptFor: inquirer.Question[] = [
+  const onlineAddinCredentials: IOnlineAddinCredentials = (authContext.authOptions as IOnlineAddinCredentials);
+  const promptFor: inquirer.Question[] = [
     {
       name: 'clientId',
       message: 'clientId',

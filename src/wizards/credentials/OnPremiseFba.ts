@@ -5,8 +5,8 @@ import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let onPremiseFbaCredentials: IOnpremiseFbaCredentials = (authContext.authOptions as IOnpremiseFbaCredentials);
-  let promptFor: inquirer.Question[] = [
+  const onPremiseFbaCredentials: IOnpremiseFbaCredentials = (authContext.authOptions as IOnpremiseFbaCredentials);
+  const promptFor: inquirer.Question[] = [
     {
       name: 'username',
       message: 'User name',

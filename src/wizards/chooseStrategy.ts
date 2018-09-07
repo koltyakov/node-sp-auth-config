@@ -8,8 +8,8 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
   let promptFor: inquirer.Question[] = [];
 
   // SharePoint Online/OnPremise autodetection
-  let target: ('Online' | 'OnPremise') = isOnPrem(answersAll.siteUrl) ? 'OnPremise' : 'Online';
-  let strategies: IStrategyDictItem[] = getStrategies().filter((strategy: IStrategyDictItem) => {
+  const target: ('Online' | 'OnPremise') = isOnPrem(answersAll.siteUrl) ? 'OnPremise' : 'Online';
+  const strategies: IStrategyDictItem[] = getStrategies().filter((strategy: IStrategyDictItem) => {
     return strategy.target.indexOf(target) !== -1;
   });
 

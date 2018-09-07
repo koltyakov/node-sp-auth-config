@@ -7,8 +7,8 @@ import { Cpass } from 'cpass';
 import { IAuthContext, IAuthContextSettings, IAuthConfigSettings } from '../interfaces';
 
 export const convertAuthContextToSettings = (authContext: IAuthContext, settings: IAuthConfigSettings = {}): IAuthContextSettings => {
-  let passwordPropertyName = getHiddenPropertyName(authContext.authOptions as any);
-  let password = (authContext.authOptions as any)[passwordPropertyName];
+  const passwordPropertyName = getHiddenPropertyName(authContext.authOptions as any);
+  const password = (authContext.authOptions as any)[passwordPropertyName];
   let plainContext: IAuthContextSettings = {
     siteUrl: authContext.siteUrl,
     strategy: authContext.strategy,
@@ -16,9 +16,9 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
     custom: authContext.custom
   };
   if (typeof password !== 'undefined' && settings.encryptPassword) {
-    let cpass = new Cpass(settings.masterKey);
-    let decodedPassword = cpass.decode(password);
-    let encodedPassword = cpass.encode(decodedPassword);
+    const cpass = new Cpass(settings.masterKey);
+    const decodedPassword = cpass.decode(password);
+    const encodedPassword = cpass.encode(decodedPassword);
     plainContext = {
       ...plainContext
     };
@@ -28,7 +28,7 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
 };
 
 export const convertSettingsToAuthContext = (configObject: IAuthContextSettings, settings: IAuthConfigSettings = {}): IAuthContext => {
-  let formattedContext: IAuthContext = {
+  const formattedContext: IAuthContext = {
     siteUrl: configObject.siteUrl || '',
     strategy: configObject.strategy,
     authOptions: {
@@ -48,8 +48,8 @@ export const convertSettingsToAuthContext = (configObject: IAuthContextSettings,
 
 export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfigSettings): Promise<any> => {
   return new Promise((resolve, reject) => {
-    let configDataJson = convertAuthContextToSettings(authContext, settings);
-    let saveFolderPath = path.dirname(settings.configPath);
+    const configDataJson = convertAuthContextToSettings(authContext, settings);
+    const saveFolderPath = path.dirname(settings.configPath);
     mkdirp(saveFolderPath, (err: any) => {
       if (err) {
         console.log('Error creating folder ' + '`' + saveFolderPath + ' `', err);
@@ -80,7 +80,7 @@ export const getHiddenPropertyName = (data: { [key: string]: string }): string =
 };
 
 export const isOnPrem = (siteUrl: string): boolean => {
-  let host: string = (url.parse(siteUrl.toLocaleLowerCase())).host;
+  const host: string = (url.parse(siteUrl.toLocaleLowerCase())).host;
   return [
     '.sharepoint.com',
     '.sharepoint.cn',

@@ -5,7 +5,7 @@ import { IAuthContext, IAuthConfigSettings } from '../interfaces';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   if (typeof settings.saveConfigOnDisk === 'undefined') {
-    let promptFor: inquirer.Question[] = [{
+    const promptFor: inquirer.Question[] = [{
       name: 'save',
       message: 'Save on disk?',
       type: 'confirm'

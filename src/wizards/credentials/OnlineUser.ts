@@ -5,8 +5,8 @@ import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let userCredentials: IUserCredentials = (authContext.authOptions as IUserCredentials);
-  let promptFor: inquirer.Question[] = [
+  const userCredentials: IUserCredentials = (authContext.authOptions as IUserCredentials);
+  const promptFor: inquirer.Question[] = [
     {
       name: 'username',
       message: 'User name',
