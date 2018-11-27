@@ -54,7 +54,8 @@ export class AuthConfig {
       .then((checkPromptsResponse): Promise<IAuthContext> => {
         let authContext: IAuthContext = {
           ...checkPromptsResponse.authContext,
-          settings: this.settings
+          settings: this.settings,
+          custom: this.customData
         };
 
         if (!checkPromptsResponse.needPrompts) {
@@ -63,7 +64,7 @@ export class AuthConfig {
             return saveConfigOnDisk(authContext, this.settings)
               .then(_ => authContext);
           } else {
-            return new Promise(r => r(authContext));
+            return Promise.resolve(authContext);
           }
 
         } else {
