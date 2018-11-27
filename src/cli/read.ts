@@ -31,10 +31,11 @@ export const read = (options: ICliReadParameters) => {
 
   authConfig.getContext()
     .then(context => {
-      let contextString = JSON.stringify(context);
-      if (options.format) {
-        contextString = JSON.stringify(context, null, 2);
-      }
+      const contextString =
+        options.format ?
+          JSON.stringify(context, null, 2) :
+          JSON.stringify(context);
+
       console.log(contextString);
     })
     .catch(error => {

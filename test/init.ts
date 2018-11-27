@@ -11,6 +11,4 @@ authConfig.getContext()
   .then(context => {
     console.log(JSON.stringify(context, null, 2));
   })
-  .catch(error => {
-    console.log(error);
-  });
+  .catch(console.log);

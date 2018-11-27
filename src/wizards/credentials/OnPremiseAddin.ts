@@ -4,8 +4,8 @@ import { IOnPremiseAddinCredentials } from 'node-sp-auth';
 import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 
 const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let onPremiseAddinCredentials: IOnPremiseAddinCredentials = (authContext.authOptions as IOnPremiseAddinCredentials);
-  let promptFor: inquirer.Question[] = [
+  const onPremiseAddinCredentials: IOnPremiseAddinCredentials = (authContext.authOptions as IOnPremiseAddinCredentials);
+  const promptFor: inquirer.Question[] = [
     {
       name: 'clientId',
       message: 'clientId',

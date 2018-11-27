@@ -99,5 +99,6 @@ authConfig.getContext()
 | encryptPassword | `true` | Encrypt password to a machine-bind hash |
 | saveConfigOnDisk | `true` | Save config `.json` to disk |
 | forcePrompts | `false` | Force parameters prompts |
+| headlessMode | `false` | Prevents interactive prompts - for headless, CI/CD processes |
 | defaultConfigPath | empty | Path to `.json` config, parameters from which are placed as defaults |
 | authOptions | empty | Any valid `node-sp-auth` options |

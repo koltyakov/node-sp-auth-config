@@ -51,8 +51,8 @@ export class AuthConfig {
   public getContext = (): Promise<IAuthContext> => {
     // console.log('Config path: ' + this.settings.configPath);
     return this.checkForPrompts()
-      .then((checkPromptsResponse): Promise<IAuthContext> => {
-        let authContext: IAuthContext = {
+      .then(checkPromptsResponse => {
+        const authContext: IAuthContext = {
           ...checkPromptsResponse.authContext,
           settings: this.settings,
           custom: this.customData
@@ -71,22 +71,22 @@ export class AuthConfig {
 
           // Step 1: Require SharePoint URL
           return siteUrlWizard(authContext, {}, this.settings)
-            .then((answersResult) => {
+            .then(answersResult => {
               // Step 2: SharePoint Online/OnPremise autodetection
               return strategyWizard(authContext, answersResult, this.settings);
             })
-            .then((answersResult) => {
+            .then(answersResult => {
               // Step 3: Ask for strategy specific parameters
               return credentialsWizard(authContext, answersResult, this.settings);
             })
-            .then((answersResult) => {
+            .then(answersResult => {
               // Step 4: Save on disk
               if (typeof this.customData !== 'undefined') {
                 answersResult.custom = this.customData;
               }
               return saveOnDiskWizard(authContext, answersResult, this.settings);
             })
-            .then((answersResult) => {
+            .then(answersResult => {
               // Return wizard data
               return convertSettingsToAuthContext(answersResult as any, this.settings);
             });
@@ -100,10 +100,11 @@ export class AuthConfig {
   }
 
   private checkForPrompts = (): Promise<ICheckPromptsResponse> => {
-    let getJsonContent = (filePath: string, jsonData?: IAuthOptions): Promise<any> => {
+    const getJsonContent = (filePath: string, jsonData?: IAuthOptions): Promise<any> => {
       return new Promise(resolve => {
         if (typeof jsonData === 'undefined') {
-          fs.exists(filePath, (exists: boolean) => {
+          fs.stat(filePath, (err, _stats) => {
+            const exists = err ? false : true;
             let jsonRawData: any = {};
             if (exists) {
               try {
@@ -123,7 +124,7 @@ export class AuthConfig {
         }
       });
     };
-    let runCheckForPrompts = (checkObject: ICheckPromptsResponse): Promise<ICheckPromptsResponse> => {
+    const runCheckForPrompts = (checkObject: ICheckPromptsResponse): Promise<ICheckPromptsResponse> => {
       return getJsonContent(this.settings.configPath, this.settings.authOptions)
         .then(check => {
           checkObject.needPrompts = !check.exists;
@@ -149,11 +150,11 @@ export class AuthConfig {
           this.context = (checkObj.jsonRawData as IAuthContextSettings);
 
           let withPassword: boolean;
-          let strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
+          const strategies = this.strategies.filter((strategy: IStrategyDictItem) => {
             return strategy.id === this.context.strategy;
           });
 
-          let passwordPropertyName = getHiddenPropertyName(this.context);
+          const passwordPropertyName = getHiddenPropertyName(this.context);
 
           if (strategies.length === 1) {
             withPassword = strategies[0].withPassword;
@@ -163,12 +164,12 @@ export class AuthConfig {
 
           // Strategies with password
           if (withPassword) {
-            let initialPassword = `${this.context[passwordPropertyName] || ''}`;
+            const initialPassword = `${this.context[passwordPropertyName] || ''}`;
             if (!this.context[passwordPropertyName]) {
               checkObj.needPrompts = true;
             } else {
               this.context[passwordPropertyName] = this.cpass.decode(this.context[passwordPropertyName]);
-              let decodedPassword = this.context[passwordPropertyName];
+              const decodedPassword = this.context[passwordPropertyName];
               if (initialPassword === decodedPassword && this.settings.encryptPassword && this.settings.saveConfigOnDisk) {
                 checkObj.needSave = true;
               }
@@ -211,11 +212,17 @@ export class AuthConfig {
           }
         });
     };
-    let checkPromptsObject: ICheckPromptsResponse = {
+    const checkPromptsObject: ICheckPromptsResponse = {
       needPrompts: true,
       needSave: false
     };
-    return runCheckForPrompts(checkPromptsObject);
+    return runCheckForPrompts(checkPromptsObject).then(checkPrompts => {
+      let needPrompts = checkPrompts.needPrompts;
+      if (this.settings.headlessMode) {
+        needPrompts = false;
+      }
+      return { ...checkPrompts, needPrompts };
+    });
   }
 
 }
