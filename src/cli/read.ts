@@ -4,7 +4,7 @@ import { AuthConfig } from '../index';
 
 import { ICliReadParameters } from '../interfaces';
 
-export const read = (options: ICliReadParameters) => {
+export const read = (options: ICliReadParameters): Promise<void> => {
 
   if (typeof options.path === 'undefined') {
     console.log(
@@ -26,16 +26,13 @@ export const read = (options: ICliReadParameters) => {
     encryptPassword: options.encrypt,
     saveConfigOnDisk: false,
     forcePrompts: false,
+    headlessMode: true,
     masterKey: options.masterkey
   });
 
-  authConfig.getContext()
+  return authConfig.getContext()
     .then(context => {
-      const contextString =
-        options.format ?
-          JSON.stringify(context, null, 2) :
-          JSON.stringify(context);
-
+      const contextString = options.format ? JSON.stringify(context, null, 2) : JSON.stringify(context);
       console.log(contextString);
     })
     .catch(error => {

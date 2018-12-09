@@ -13,15 +13,9 @@ import adfsUserWizard from './credentials/AdfsUser';
 import onDemandWizard from './credentials/OnDemand';
 // <<< Strategies wizards
 
-const wizard = (
-  authContext: IAuthContext,
-  answersAll: inquirer.Answers = {},
-  settings: IAuthConfigSettings = {}
-): Promise<inquirer.Answers> => {
-  let promptFor: inquirer.Question[] = [];
+const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   let answers: Promise<inquirer.Answers>;
   // Ask for strategy specific parameters
-  promptFor = [];
   switch (answersAll.strategy) {
     case 'OnPremiseAddinCredentials':
       answers = onPremiseAddinWizard(authContext, answersAll);
@@ -48,7 +42,7 @@ const wizard = (
       answers = onDemandWizard(authContext, answersAll);
       break;
     default:
-      answers = new Promise(r => r(answersAll));
+      answers = Promise.resolve(answersAll);
       break;
   }
   return answers;

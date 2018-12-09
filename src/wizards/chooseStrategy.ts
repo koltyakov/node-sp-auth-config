@@ -4,7 +4,7 @@ import { IAuthContext, IAuthConfigSettings, IStrategyDictItem } from '../interfa
 import { getStrategies } from '../config';
 import { isOnPrem } from '../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
+const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   let promptFor: inquirer.Question[] = [];
 
   // SharePoint Online/OnPremise autodetection
@@ -31,14 +31,12 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
       return position;
     }, 0)
   }];
-  // tslint:disable-next-line:no-shadowed-variable
-  return inquirer.prompt(promptFor)
-    .then((answers: inquirer.Answers) => {
-      return {
-        ...answersAll,
-        ...answers
-      };
-    });
+  return inquirer.prompt(promptFor).then(answers => {
+    return {
+      ...answersAll,
+      ...answers
+    };
+  });
 };
 
 export default wizard;
