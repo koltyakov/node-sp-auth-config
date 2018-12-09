@@ -4,7 +4,7 @@ import { AuthConfig } from '../index';
 
 import { ICliInitParameters } from '../interfaces';
 
-export const init = (options: ICliInitParameters) => {
+export const init = (options: ICliInitParameters): Promise<void> => {
 
   if (typeof options.path === 'undefined') {
     console.log(
@@ -29,7 +29,7 @@ export const init = (options: ICliInitParameters) => {
     masterKey: options.masterkey
   });
 
-  authConfig.getContext()
+  return authConfig.getContext()
     .then(_ => {
       console.log(`\n${colors.green('File saved to')} ${colors.cyan(path.resolve(options.path))}`);
     })

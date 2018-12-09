@@ -1,33 +1,26 @@
 import * as inquirer from 'inquirer';
 
-import { convertAuthContextToSettings, convertSettingsToAuthContext, saveConfigOnDisk } from '../utils';
+import { convertSettingsToAuthContext, saveConfigOnDisk } from '../utils';
 import { IAuthContext, IAuthConfigSettings } from '../interfaces';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
+const wizard = (_authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   if (typeof settings.saveConfigOnDisk === 'undefined') {
     const promptFor: inquirer.Question[] = [{
       name: 'save',
       message: 'Save on disk?',
       type: 'confirm'
     }];
-    return inquirer.prompt(promptFor)
-      .then((answers: inquirer.Answers) => {
-        if (answers.save) {
-          return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings)
-            .then(() => {
-              return answersAll;
-            });
-        } else {
-          return answersAll;
-        }
-      });
-  } else if (settings.saveConfigOnDisk) {
-    return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings)
-      .then(() => {
+    return inquirer.prompt(promptFor).then(answers => {
+      if (answers.save) {
+        return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings).then(() => answersAll);
+      } else {
         return answersAll;
-      });
+      }
+    });
+  } else if (settings.saveConfigOnDisk) {
+    return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings).then(() => answersAll);
   } else {
-    return new Promise(r => r(answersAll));
+    return Promise.resolve(answersAll);
   }
 };
 

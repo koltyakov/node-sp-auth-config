@@ -4,7 +4,7 @@ import { IOnpremiseTmgCredentials } from 'node-sp-auth';
 import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
+const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   const onPremiseTmgCredentials: IOnpremiseTmgCredentials = (authContext.authOptions as IOnpremiseTmgCredentials);
   const promptFor: inquirer.Question[] = [
     {
@@ -31,19 +31,18 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
       }
     }
   ];
-  return inquirer.prompt(promptFor)
-    .then((answers: inquirer.Answers) => {
-      return {
-        ...answersAll,
-        ...answers,
-        password: answers.password === defaultPasswordMask
-          ? onPremiseTmgCredentials.password
-          : answers.password,
-        ...{
-          tmg: true
-        }
-      };
-    });
+  return inquirer.prompt(promptFor).then(answers => {
+    return {
+      ...answersAll,
+      ...answers,
+      password: answers.password === defaultPasswordMask
+        ? onPremiseTmgCredentials.password
+        : answers.password,
+      ...{
+        tmg: true
+      }
+    };
+  });
 };
 
 export default wizard;

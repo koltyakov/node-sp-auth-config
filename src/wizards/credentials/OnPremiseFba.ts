@@ -4,7 +4,7 @@ import { IOnpremiseFbaCredentials } from 'node-sp-auth';
 import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
 import { defaultPasswordMask } from '../../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
+const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
   const onPremiseFbaCredentials: IOnpremiseFbaCredentials = (authContext.authOptions as IOnpremiseFbaCredentials);
   const promptFor: inquirer.Question[] = [
     {
@@ -31,19 +31,18 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, se
       }
     }
   ];
-  return inquirer.prompt(promptFor)
-    .then((answers: inquirer.Answers) => {
-      return {
-        ...answersAll,
-        ...answers,
-        password: answers.password === defaultPasswordMask
-          ? onPremiseFbaCredentials.password
-          : answers.password,
-        ...{
-          fba: true
-        }
-      };
-    });
+  return inquirer.prompt(promptFor).then(answers => {
+    return {
+      ...answersAll,
+      ...answers,
+      password: answers.password === defaultPasswordMask
+        ? onPremiseFbaCredentials.password
+        : answers.password,
+      ...{
+        fba: true
+      }
+    };
+  });
 };
 
 export default wizard;
