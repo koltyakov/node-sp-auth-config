@@ -26,15 +26,16 @@ export const read = (options: ICliReadParameters) => {
     encryptPassword: options.encrypt,
     saveConfigOnDisk: false,
     forcePrompts: false,
+    headlessMode: true,
     masterKey: options.masterkey
   });
 
   authConfig.getContext()
     .then(context => {
       const contextString =
-        options.format ?
-          JSON.stringify(context, null, 2) :
-          JSON.stringify(context);
+        options.format
+          ? JSON.stringify(context, null, 2)
+          : JSON.stringify(context);
 
       console.log(contextString);
     })
