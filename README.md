@@ -10,13 +10,14 @@
 
 Versions supported:
 
-- SharePoint 2013
-- SharePoint 2016
 - SharePoint Online
+- SharePoint 2019
+- SharePoint 2016
+- SharePoint 2013
 
 Authentication options:
 
-- SharePoint 2013, 2016:
+- SharePoint 2013, 2016, 2019:
   - Addin only permissions
   - User credentials through the http ntlm handshake
   - Form-based authentication (FBA)
@@ -65,9 +66,7 @@ authConfig.getContext()
     console.log(JSON.stringify(context, null, 2));
     // context.authOptions - node-sp-auth authentication options
   })
-  .catch(error => {
-    console.log(error);
-  });
+  .catch(console.warn);
 ```
 
 ### Usage in JavaScript
@@ -86,9 +85,7 @@ authConfig.getContext()
     console.log(JSON.stringify(context, null, 2));
     // context.authOptions - node-sp-auth authentication options
   })
-  .catch(error => {
-    console.log(error);
-  });
+  .catch(console.warn);
 ```
 
 #### Initiation parameters
@@ -102,3 +99,25 @@ authConfig.getContext()
 | headlessMode | `false` | Prevents interactive prompts - for headless, CI/CD processes |
 | defaultConfigPath | empty | Path to `.json` config, parameters from which are placed as defaults |
 | authOptions | empty | Any valid `node-sp-auth` options |
+
+### Production runtime
+
+#### Headless mode
+
+When using in a headless mode, in case of missing parameters, one can expect non-interactive behavior with no prompts but graceful exit with corresponding error output.
+
+This can be achieved by providing `headlessMode` settings property is equal to `true`.
+
+The headless mode also automatically configured when `NODE_ENV` (or `SPAUTH_ENV`) environment variable is equal to `production`.
+
+#### Environment variables
+
+All the parameters which are usually stored in `private.json` can be defined also using environment variables. Environment variables started with `SPAUTH_` prefix are recognized with the library. Second part of the name is an actual name of the `node-sp-auth` credentials property yet in uppercase (e.g. `SPAUTH_SITEURL`, `SPAUTH_USERNAME`, `SPAUTH_PASSWORD`).
+
+Along with credentials props these service variables are used:
+
+| Variable | Description |
+| --- | --- |
+| `NODE_ENV` | When equal to `production` forces `headlessMode`. |
+| `SPAUTH_ENV` | When equal to `production` forces `headlessMode`. Overwrites `NODE_ENV`. |
+| `SPAUTH_FORCE` | Makes `SPAUTH_{CREDENTIALS}` variables take precedence over those possibly stored in `private.json`. |

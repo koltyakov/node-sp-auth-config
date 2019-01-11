@@ -3,14 +3,14 @@ import { IAuthOptions } from 'node-sp-auth';
 // Auth interfaces
 
 export type StrategyCode =
-  'OnPremiseAddinCredentials' |
-  'OnpremiseUserCredentials' |
-  'OnpremiseTmgCredentials' |
-  'OnpremiseFbaCredentials' |
-  'OnlineAddinCredentials' |
-  'UserCredentials' |
-  'AdfsUserCredentials' |
-  'OnDemandCredentials';
+  | 'OnPremiseAddinCredentials'
+  | 'OnpremiseUserCredentials'
+  | 'OnpremiseTmgCredentials'
+  | 'OnpremiseFbaCredentials'
+  | 'OnlineAddinCredentials'
+  | 'UserCredentials'
+  | 'AdfsUserCredentials'
+  | 'OnDemandCredentials';
 
 export interface IAuthContext {
   siteUrl: string;
