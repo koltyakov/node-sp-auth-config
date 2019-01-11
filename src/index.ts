@@ -5,6 +5,7 @@ import * as spauth from 'node-sp-auth';
 
 // Utils
 import { convertSettingsToAuthContext, saveConfigOnDisk, getHiddenPropertyName } from './utils';
+import { getConfigFromEnvVariables } from './utils/env';
 
 // Step wizards
 import siteUrlWizard from './wizards/siteUrl';
@@ -36,11 +37,18 @@ export class AuthConfig {
   constructor (settings: IAuthConfigSettings = {}) {
     this.strategies = getStrategies();
     // this.targets = getTargetsTypes();
+    let headlessMode = settings.headlessMode;
+    if (process.env.SPAUTH_ENV) {
+      headlessMode = process.env.SPAUTH_ENV === 'production';
+    } else {
+      headlessMode = process.env.NODE_ENV === 'production';
+    }
     this.settings = {
       ...settings,
       configPath: path.resolve(settings.configPath || './config/private.json'),
       encryptPassword: typeof settings.encryptPassword !== 'undefined' ? settings.encryptPassword : true,
-      saveConfigOnDisk: typeof settings.saveConfigOnDisk !== 'undefined' ? settings.saveConfigOnDisk : true
+      saveConfigOnDisk: typeof settings.saveConfigOnDisk !== 'undefined' ? settings.saveConfigOnDisk : true,
+      headlessMode
     };
     if (typeof this.settings.encryptPassword === 'string') {
       this.settings.encryptPassword = !((this.settings.encryptPassword as string).toLowerCase() === 'false');
@@ -108,6 +116,30 @@ export class AuthConfig {
         ...this.getJsonContent(this.settings.defaultConfigPath).jsonRawData,
         ...checkObj.jsonRawData
       };
+    }
+
+    const authPropsFromEnvVariables = getConfigFromEnvVariables();
+    if (authPropsFromEnvVariables) {
+      checkObj.needPrompts = false;
+      const mergeAuthProps = ({ props, custom, mainCustom, mainProps }: any): void => {
+        checkObj.jsonRawData = {
+          ...props,
+          custom: {
+            ...custom || {},
+            ...mainCustom || {}
+          },
+          ...mainProps
+        };
+      };
+      if (process.env.SPAUTH_FORCE === 'true') {
+        const { custom: mainCustom, ...mainProps } = authPropsFromEnvVariables;
+        const { custom, ...props } = checkObj.jsonRawData;
+        mergeAuthProps({ props, custom, mainCustom, mainProps });
+      } else {
+        const { custom: mainCustom, ...mainProps } = checkObj.jsonRawData;
+        const { custom, ...props } = authPropsFromEnvVariables;
+        mergeAuthProps({ props, custom, mainCustom, mainProps });
+      }
     }
 
     this.context = checkObj.jsonRawData as IAuthContextSettings;
