@@ -37,12 +37,10 @@ export class AuthConfig {
   constructor (settings: IAuthConfigSettings = {}) {
     this.strategies = getStrategies();
     // this.targets = getTargetsTypes();
-    let headlessMode = settings.headlessMode;
-    if (process.env.SPAUTH_ENV) {
-      headlessMode = process.env.SPAUTH_ENV === 'production';
-    } else {
-      headlessMode = process.env.NODE_ENV === 'production';
-    }
+    const envMode = process.env.SPAUTH_ENV || process.env.NODE_ENV;
+    const headlessMode = typeof settings.headlessMode !== 'undefined'
+      ? settings.headlessMode
+      : envMode === 'production';
     this.settings = {
       ...settings,
       configPath: path.resolve(settings.configPath || './config/private.json'),
