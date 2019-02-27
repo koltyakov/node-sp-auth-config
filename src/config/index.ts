@@ -51,7 +51,7 @@ export const getStrategies = (): IStrategyDictItem[] => {
       id: 'AdfsUserCredentials',
       name: 'ADFS user credentials',
       withPassword: true,
-      target: ['Online', 'OnPremise'],
+      target: ['OnPremise'], // 'Online', for ADFS UserCredentials strategy within node-sp-auth resolves auth autometically
       verifyCallback: (...args: any[]) => {
         return spauth.isAdfsCredentials(args[1]);
       }
