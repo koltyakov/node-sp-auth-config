@@ -204,9 +204,9 @@ export class AuthConfig {
       let jsonRawData: any = {};
       if (exists) {
         try {
-          // const rawContent = fs.readFileSync(path.resolve(filePath)).toString();
-          // jsonRawData = JSON.parse(rawContent);
-          jsonRawData = require(filePath);
+          const rawContent = fs.readFileSync(path.resolve(filePath)).toString();
+          jsonRawData = JSON.parse(rawContent);
+          // jsonRawData = require(filePath);
         } catch (ex) { /**/ }
       }
       if (typeof jsonRawData.custom !== 'undefined') {
