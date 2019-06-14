@@ -8,24 +8,33 @@
 
 `node-sp-auth-config` provides wizard-like approach for building and managing config files for [node-sp-auth](https://github.com/s-KaiNet/node-sp-auth) (Node.js to SharePoint unattended http authentication). Includes CLI for generating config files from command prompt.
 
-Versions supported:
+**Versions supported**:
 
 - SharePoint Online
 - SharePoint 2019
 - SharePoint 2016
 - SharePoint 2013
+- SharePoint 2010 (limited support)
 
-Authentication options:
+**Authentication options**:
 
-- SharePoint 2013, 2016, 2019:
-  - Addin only permissions
-  - User credentials through the http ntlm handshake
-  - Form-based authentication (FBA)
-  - Forefront TMG authentication
 - SharePoint Online:
-  - Addin only permissions
-  - SAML based with user credentials
-  - ADFS user credentials (works with both SharePoint on-premise and Online)
+  - User credentials (SAML/ADFS)
+  - Add-In Only permissions
+  - On-Demand authentication (using Electron popup)
+- SharePoint 2019, 2016, 2013:
+  - User credentials (NTLM, NTMLv2)
+  - ADFS user credentials
+  - Form-based authentication (FBA)
+  - Form-based authentication (Forefront TMG)
+  - Add-In Only permissions
+  - On-Demand authentication (using Electron popup)
+- SharePoint 2010:
+  - User credentials (NTLM, NTMLv2)
+  - Form-based authentication (FBA)
+  - Form-based authentication (Forefront TMG)
+
+Config layer and auth supports Office 365 Dedicated (SPO on custom domain) as well.
 
 ---
 
@@ -62,7 +71,7 @@ const authConfig = new AuthConfig({
 });
 
 authConfig.getContext()
-  .then(context => {
+  .then((context) => {
     console.log(JSON.stringify(context, null, 2));
     // context.authOptions - node-sp-auth authentication options
   })
@@ -81,7 +90,7 @@ const authConfig = new AuthConfig({
 });
 
 authConfig.getContext()
-  .then(context => {
+  .then((context) => {
     console.log(JSON.stringify(context, null, 2));
     // context.authOptions - node-sp-auth authentication options
   })
