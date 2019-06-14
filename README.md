@@ -23,7 +23,7 @@
   - Add-In Only permissions
   - On-Demand authentication (using Electron popup)
 - SharePoint 2019, 2016, 2013:
-  - User credentials (NTLM, NTMLv2)
+  - User credentials (NTLM, NTLM v2)
   - ADFS user credentials
   - Form-based authentication (FBA)
   - Form-based authentication (Forefront TMG)
