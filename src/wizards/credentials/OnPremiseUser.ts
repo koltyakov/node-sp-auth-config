@@ -1,12 +1,12 @@
-import * as inquirer from 'inquirer';
-
+import { Question, prompt } from 'inquirer';
 import { IOnpremiseUserCredentials } from 'node-sp-auth';
-import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
-import { defaultPasswordMask } from '../../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  const onPremiseUserCredentials: IOnpremiseUserCredentials = (authContext.authOptions as IOnpremiseUserCredentials);
-  let promptFor: inquirer.Question[] = [
+import { defaultPasswordMask } from '../../utils';
+import { IWizardCallback } from '../../interfaces/wizard';
+
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+  const onPremiseUserCredentials = authContext.authOptions as IOnpremiseUserCredentials;
+  let promptFor: Question[] = [
     {
       name: 'username',
       message: 'User name',
@@ -15,49 +15,46 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _s
       validate: (answer: string) => answer.length > 0
     }
   ];
-  return inquirer.prompt(promptFor).then(answers => {
-    answersAll = {
-      ...answersAll,
-      ...answers
-    };
-    let noDomain = false;
-    if (answers.username.indexOf('@') !== -1) {
-      noDomain = true;
-    }
-    if (answers.username.indexOf('\\') !== -1) {
-      noDomain = true;
-      answers.username = answers.username.replace('\\\\', '\\');
-      answersAll.domain = answers.username.split('\\')[0];
-      answersAll.username = answers.username.split('\\')[1];
-    }
-    promptFor = [];
-    if (!noDomain) {
-      promptFor.push({
-        name: 'domain',
-        message: 'Domain',
-        type: 'input',
-        default: onPremiseUserCredentials.domain,
-        validate: (answer: string) => answer.length > 0
-      });
-    }
+  let { username } = await prompt(promptFor);
+  answersAll = {
+    ...answersAll,
+    username
+  };
+  let noDomain = false;
+  if (username.indexOf('@') !== -1) {
+    noDomain = true;
+  }
+  if (username.indexOf('\\') !== -1) {
+    noDomain = true;
+    username = username.replace('\\\\', '\\');
+    answersAll.domain = username.split('\\')[0];
+    answersAll.username = username.split('\\')[1];
+  }
+  promptFor = [];
+  if (!noDomain) {
     promptFor.push({
-      name: 'password',
-      message: 'Password',
-      type: 'password',
-      default: onPremiseUserCredentials.password ? defaultPasswordMask : null,
-      validate: (answer: string) => answer.length > 0
+      name: 'domain',
+      message: 'Domain',
+      type: 'input',
+      default: onPremiseUserCredentials.domain,
+      validate: (answer) => answer.length > 0
     });
-    return inquirer.prompt(promptFor).then(answers => {
-      answersAll = {
-        ...answersAll,
-        ...answers,
-        password: answers.password === defaultPasswordMask
-          ? onPremiseUserCredentials.password
-          : answers.password
-      };
-      return answersAll;
-    });
+  }
+  promptFor.push({
+    name: 'password',
+    message: 'Password',
+    type: 'password',
+    mask: '*',
+    default: onPremiseUserCredentials.password ? defaultPasswordMask : null,
+    validate: (answer) => answer.length > 0
   });
+  const answers = await prompt(promptFor);
+  return {
+    ...answersAll, ...answers,
+    password: answers.password === defaultPasswordMask
+      ? onPremiseUserCredentials.password
+      : answers.password
+  };
 };
 
 export default wizard;

@@ -1,42 +1,56 @@
-import * as inquirer from 'inquirer';
+import { Question, ChoiceType, Separator, prompt } from 'inquirer';
+import { parse } from 'url';
 
-import { IAuthContext, IAuthConfigSettings, IStrategyDictItem } from '../interfaces';
 import { getStrategies } from '../config';
 import { isOnPrem } from '../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let promptFor: inquirer.Question[] = [];
+import { IStrategyDictItem } from '../interfaces';
+import { IWizardCallback } from '../interfaces/wizard';
 
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
   // SharePoint Online/OnPremise autodetection
   const target: ('Online' | 'OnPremise') = isOnPrem(answersAll.siteUrl) ? 'OnPremise' : 'Online';
-  const strategies: IStrategyDictItem[] = getStrategies().filter((strategy: IStrategyDictItem) => {
+  const { protocol, host } = parse(answersAll.siteUrl);
+  const strategies: IStrategyDictItem[] = getStrategies().filter((strategy) => {
+    // SharePoint Dedicated url doesn't stand SPO pattern so giving and option to provide SPO as an option even for OnPrem
+    if (
+      target === 'OnPremise' &&
+      protocol === 'https:' &&
+      host.indexOf('.') !== -1 &&
+      strategy.target.indexOf('O365Dedicated') !== -1
+    ) {
+      return true;
+    }
     return strategy.target.indexOf(target) !== -1;
   });
 
-  promptFor = [{
+  const promptFor: Question[] = [{
     name: 'strategy',
     message: 'Authentication strategy',
     type: 'list',
-    choices: strategies.map((strategy: IStrategyDictItem) => {
-      return {
+    choices: strategies.reduce((choices, strategy) => {
+      if (strategy.withSeparator && choices.length > 0) {
+        choices.push(new Separator());
+      }
+      const choice: ChoiceType<string> = {
         name: strategy.name,
         value: strategy.id,
         short: strategy.name
       };
-    }),
-    default: strategies.reduce((position: number, strategy: IStrategyDictItem, index: number) => {
+      choices.push(choice);
+      return choices;
+    }, []),
+    default: strategies.reduce((position, strategy, index) => {
       if (authContext.strategy === strategy.id) {
         position = index;
       }
       return position;
-    }, 0)
+    }, 0),
+    pageSize: 9
   }];
-  return inquirer.prompt(promptFor).then(answers => {
-    return {
-      ...answersAll,
-      ...answers
-    };
-  });
+
+  const answers = await prompt(promptFor);
+  return { ...answersAll, ...answers };
 };
 
 export default wizard;

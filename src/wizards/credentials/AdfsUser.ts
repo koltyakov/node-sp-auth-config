@@ -1,37 +1,42 @@
-import * as inquirer from 'inquirer';
-
+import { Question, prompt } from 'inquirer';
 import { IAdfsUserCredentials } from 'node-sp-auth';
-import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
-import { defaultPasswordMask } from '../../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  const adfsUserCredentials: IAdfsUserCredentials = (authContext.authOptions as IAdfsUserCredentials);
-  const promptFor: inquirer.Question[] = [
+import { defaultPasswordMask } from '../../utils';
+import { IWizardCallback } from '../../interfaces/wizard';
+
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+  const adfsUserCredentials = authContext.authOptions as IAdfsUserCredentials;
+  const promptFor: Question[] = [
     {
       name: 'username',
       message: 'User name',
       type: 'input',
       default: adfsUserCredentials.username,
       validate: (answer: string) => answer.length > 0
-    }, {
+    },
+    {
       name: 'password',
       message: 'Password',
       type: 'password',
+      mask: '*',
       default: adfsUserCredentials.password ? defaultPasswordMask : null,
       validate: (answer: string) => answer.length > 0
-    }, {
+    },
+    {
       name: 'relyingParty',
       message: 'relyingParty',
       type: 'input',
       default: adfsUserCredentials.relyingParty || 'urn:sharepoint:portal',
       validate: (answer: string) => answer.length > 0
-    }, {
+    },
+    {
       name: 'adfsUrl',
       message: 'adfsUrl',
       type: 'input',
       default: adfsUserCredentials.adfsUrl,
       validate: (answer: string) => answer.length > 0
-    }, {
+    },
+    {
       name: 'adfsCookie',
       message: 'adfsCookie',
       type: 'input',
@@ -39,15 +44,13 @@ const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _s
       validate: (answer: string) => answer.length > 0
     }
   ];
-  return inquirer.prompt(promptFor).then(answers => {
-    return {
-      ...answersAll,
-      ...answers,
-      password: answers.password === defaultPasswordMask
-        ? adfsUserCredentials.password
-        : answers.password
-    };
-  });
+  const answers = await prompt(promptFor);
+  return {
+    ...answersAll, ...answers,
+    password: answers.password === defaultPasswordMask
+      ? adfsUserCredentials.password
+      : answers.password
+  };
 };
 
 export default wizard;

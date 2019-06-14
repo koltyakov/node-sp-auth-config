@@ -1,27 +1,28 @@
-import * as inquirer from 'inquirer';
+import { Question, prompt } from 'inquirer';
 
 import { convertSettingsToAuthContext, saveConfigOnDisk } from '../utils';
-import { IAuthContext, IAuthConfigSettings } from '../interfaces';
 
-const wizard = (_authContext: IAuthContext, answersAll: inquirer.Answers = {}, settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
+import { IAuthContext } from '../interfaces';
+import { IWizardCallback } from '../interfaces/wizard';
+
+const wizard: IWizardCallback = async (_, answersAll = {}, settings = {}) => {
+  let saveOnDisk = settings.saveConfigOnDisk;
   if (typeof settings.saveConfigOnDisk === 'undefined') {
-    const promptFor: inquirer.Question[] = [{
+    const promptFor: Question[] = [{
       name: 'save',
       message: 'Save on disk?',
       type: 'confirm'
     }];
-    return inquirer.prompt(promptFor).then(answers => {
-      if (answers.save) {
-        return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings).then(() => answersAll);
-      } else {
-        return answersAll;
-      }
-    });
-  } else if (settings.saveConfigOnDisk) {
-    return saveConfigOnDisk(convertSettingsToAuthContext(answersAll as IAuthContext), settings).then(() => answersAll);
-  } else {
-    return Promise.resolve(answersAll);
+    const answers = await prompt(promptFor);
+    saveOnDisk = answers.save;
   }
+
+  if (saveOnDisk) {
+    const authCtx = convertSettingsToAuthContext(answersAll as IAuthContext);
+    await saveConfigOnDisk(authCtx, settings);
+  }
+
+  return answersAll;
 };
 
 export default wizard;

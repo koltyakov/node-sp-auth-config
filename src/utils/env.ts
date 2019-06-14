@@ -15,7 +15,8 @@ const authPropsMapping = {
   shathumbprint: 'shaThumbprint',
   fba: 'fba',
   tmg: 'tmg',
-  domain: 'domain'
+  domain: 'domain',
+  online: 'online'
 };
 
 export interface IAuthEnvProps {
@@ -26,7 +27,7 @@ export interface IAuthEnvProps {
 export const getConfigFromEnvVariables = (): IAuthEnvProps | null => {
   const prefix = 'SPAUTH_';
   const authProps = Object.keys(process.env)
-    .filter(key => key.indexOf(prefix) === 0)
+    .filter((key) => key.indexOf(prefix) === 0)
     .reduce((res, key) => {
       const authProp = authPropsMapping[key.replace(prefix, '').toLowerCase()];
       if (typeof authProp !== 'undefined') {

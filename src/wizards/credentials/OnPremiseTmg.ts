@@ -1,48 +1,36 @@
-import * as inquirer from 'inquirer';
-
+import { Question, prompt } from 'inquirer';
 import { IOnpremiseTmgCredentials } from 'node-sp-auth';
-import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
-import { defaultPasswordMask } from '../../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  const onPremiseTmgCredentials: IOnpremiseTmgCredentials = (authContext.authOptions as IOnpremiseTmgCredentials);
-  const promptFor: inquirer.Question[] = [
+import { defaultPasswordMask } from '../../utils';
+import { IWizardCallback } from '../../interfaces/wizard';
+
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+  const onPremiseTmgCredentials = authContext.authOptions as IOnpremiseTmgCredentials;
+  const promptFor: Question[] = [
     {
       name: 'username',
       message: 'User name',
       type: 'input',
       default: onPremiseTmgCredentials.username,
-      validate: (answer: string) => {
-        if (answer.length === 0) {
-          return false;
-        }
-        return true;
-      }
-    }, {
+      validate: (answer) => answer.length > 0
+    },
+    {
       name: 'password',
       message: 'Password',
       type: 'password',
+      mask: '*',
       default: onPremiseTmgCredentials.password ? defaultPasswordMask : null,
-      validate: (answer: string) => {
-        if (answer.length === 0) {
-          return false;
-        }
-        return true;
-      }
+      validate: (answer) => answer.length > 0
     }
   ];
-  return inquirer.prompt(promptFor).then(answers => {
-    return {
-      ...answersAll,
-      ...answers,
-      password: answers.password === defaultPasswordMask
-        ? onPremiseTmgCredentials.password
-        : answers.password,
-      ...{
-        tmg: true
-      }
-    };
-  });
+  const answers = await prompt(promptFor);
+  return {
+    ...answersAll, ...answers,
+    password: answers.password === defaultPasswordMask
+      ? onPremiseTmgCredentials.password
+      : answers.password,
+    tmg: true
+  };
 };
 
 export default wizard;

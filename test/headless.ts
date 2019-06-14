@@ -10,7 +10,7 @@ const authConfig = new AuthConfig({
 });
 
 authConfig.getContext()
-  .then(context => {
+  .then((context) => {
     console.log(JSON.stringify(context, null, 2));
     sp.setup({
       sp: {
@@ -19,8 +19,8 @@ authConfig.getContext()
       }
     });
     const web = new Web(context.siteUrl);
-    web.select('Title').get().then(console.log).catch(_err => {
+    web.select('Title').get().then(console.log).catch(() => {
       console.log(`This should fail by design - test passed!`);
     });
   })
-  .catch(console.log);
+  .catch(console.warn);

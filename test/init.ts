@@ -8,7 +8,5 @@ const authConfig = new AuthConfig({
 });
 
 authConfig.getContext()
-  .then(context => {
-    console.log(JSON.stringify(context, null, 2));
-  })
-  .catch(console.log);
+  .then((context) => console.log(JSON.stringify(context, null, 2)))
+  .catch(console.warn);

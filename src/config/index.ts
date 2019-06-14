@@ -13,57 +13,72 @@ export const getStrategies = (): IStrategyDictItem[] => {
       withPassword: true,
       target: ['OnPremise'],
       verifyCallback: spauth.isUserCredentialsOnpremise
-    }, {
+    },
+    {
+      id: 'AdfsUserCredentials',
+      name: 'ADFS user credentials (On-Prem)',
+      withPassword: true,
+      target: ['OnPremise'],
+      verifyCallback: (...args: any[]) => spauth.isAdfsCredentials(args[1])
+    },
+    {
       id: 'OnpremiseFbaCredentials',
       name: 'Form-based authentication (FBA)',
       withPassword: true,
       target: ['OnPremise'],
       verifyCallback: spauth.isFbaCredentialsOnpremise
-    }, {
+    },
+    {
       id: 'OnpremiseTmgCredentials',
-      name: 'Forefront TMG authentication',
+      name: 'Form-based authentication (Forefront TMG)',
       withPassword: true,
       target: ['OnPremise'],
       verifyCallback: spauth.isTmgCredentialsOnpremise
-    }, {
+    },
+    {
       id: 'OnPremiseAddinCredentials',
-      name: 'Add-In only permissions',
+      name: 'Add-In Only permissions (On-Prem)',
       withPassword: false,
       target: ['OnPremise'],
-      verifyCallback: (...args: any[]) => {
-        return spauth.isAddinOnlyOnpremise(args[1]);
-      }
-    }, {
+      verifyCallback: (...args: any[]) => spauth.isAddinOnlyOnpremise(args[1])
+    },
+    {
       id: 'UserCredentials',
-      name: 'User credentials (SAML)',
+      name: 'User credentials (SAML/ADFS)',
       withPassword: true,
       target: ['Online'],
       verifyCallback: spauth.isUserCredentialsOnline
-    }, {
+    },
+    {
       id: 'OnlineAddinCredentials',
-      name: 'Add-In only permissions',
+      name: 'Add-In Only permissions',
       withPassword: true,
       target: ['Online'],
-      verifyCallback: (...args: any[]) => {
-        return spauth.isAddinOnlyOnline(args[1]);
-      }
-    }, {
-      id: 'AdfsUserCredentials',
-      name: 'ADFS user credentials',
-      withPassword: true,
-      target: ['OnPremise'], // 'Online', for ADFS UserCredentials strategy within node-sp-auth resolves auth autometically
-      verifyCallback: (...args: any[]) => {
-        return spauth.isAdfsCredentials(args[1]);
-      }
-    }, {
+      verifyCallback: (...args: any[]) => spauth.isAddinOnlyOnline(args[1])
+    },
+    {
       id: 'OnDemandCredentials',
-      name: 'On-demand credentials',
+      name: 'On-Demand credentials (Electron is required, not compatible with NTLM)',
       withPassword: false,
       target: ['Online', 'OnPremise'],
-      verifyCallback: (...args: any[]) => {
-        return spauth.isOndemandCredentials(args[1]);
-      }
-    }
+      verifyCallback: (...args: any[]) => spauth.isOndemandCredentials(args[1])
+    },
+    // Office 365 Dedicated
+    {
+      id: 'UserCredentials',
+      name: 'User credentials - SAML/ADFS (SPO, O365 Dedicated)',
+      withPassword: true,
+      target: ['O365Dedicated'],
+      verifyCallback: spauth.isUserCredentialsOnline,
+      withSeparator: true
+    },
+    {
+      id: 'OnlineAddinCredentials',
+      name: 'Add-In Only permissions (SPO, O365 Dedicated)',
+      withPassword: true,
+      target: ['O365Dedicated'],
+      verifyCallback: (...args: any[]) => spauth.isAddinOnlyOnline(args[1])
+    },
   ];
 
   return strategies;

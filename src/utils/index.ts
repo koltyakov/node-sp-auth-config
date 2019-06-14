@@ -20,9 +20,9 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
     const decodedPassword = cpass.decode(password);
     const encodedPassword = cpass.encode(decodedPassword);
     plainContext = {
-      ...plainContext
+      ...plainContext,
+      [passwordPropertyName]: encodedPassword
     };
-    plainContext[passwordPropertyName] = encodedPassword;
   }
   return plainContext;
 };
@@ -46,18 +46,18 @@ export const convertSettingsToAuthContext = (configObject: IAuthContextSettings,
   return formattedContext;
 };
 
-export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfigSettings): Promise<any> => {
+export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfigSettings): Promise<void> => {
   return new Promise((resolve, reject) => {
     const configDataJson = convertAuthContextToSettings(authContext, settings);
     const saveFolderPath = path.dirname(settings.configPath);
-    mkdirp(saveFolderPath, (err: any) => {
+    mkdirp(saveFolderPath, (err) => {
       if (err) {
-        console.log('Error creating folder ' + '`' + saveFolderPath + ' `', err);
+        console.error(`Error creating folder "${saveFolderPath}"`, err);
       }
-      // tslint:disable-next-line:no-shadowed-variable
-      fs.writeFile(settings.configPath, JSON.stringify(configDataJson, null, 2), 'utf8', (err: any) => {
+      const data = JSON.stringify(configDataJson, null, 2);
+      fs.writeFile(settings.configPath, data, 'utf8', (err) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           return reject(err);
         }
         resolve();
@@ -68,19 +68,18 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
 
 export const defaultPasswordMask: string = '********';
 
-export const getHiddenPropertyName = (data: { [key: string]: string }): string => {
+export const getHiddenPropertyName = (data: { [key: string]: string; }): string => {
   if (data.password) {
     return 'password';
   }
   if (data.clientSecret) {
     return 'clientSecret';
   }
-
   return undefined;
 };
 
 export const isOnPrem = (siteUrl: string): boolean => {
-  const host: string = (url.parse(siteUrl.toLocaleLowerCase())).host;
+  const host = url.parse(siteUrl.toLocaleLowerCase()).host;
   return [
     '.sharepoint.com',
     '.sharepoint.cn',
@@ -88,6 +87,6 @@ export const isOnPrem = (siteUrl: string): boolean => {
     '.sharepoint-mil.us',
     '.sharepoint.us'
   ]
-    .filter(uri => host.indexOf(uri) !== -1)
+    .filter((uri) => host.indexOf(uri) !== -1)
     .length === 0;
 };

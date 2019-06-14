@@ -29,9 +29,10 @@ export interface IAuthContextSettings {
 export interface IStrategyDictItem {
   id: StrategyCode;
   withPassword: boolean;
-  target: ('OnPremise' | 'Online')[];
+  target: ('OnPremise' | 'Online' | 'O365Dedicated')[];
   name: string;
-  verifyCallback?: Function;
+  verifyCallback?: (...args: any[]) => boolean;
+  withSeparator?: boolean;
 }
 
 export interface IAuthConfigSettings {

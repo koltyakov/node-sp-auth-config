@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Cpass } from 'cpass';
-import * as spauth from 'node-sp-auth';
+import { getAuth, IAuthOptions, IAuthResponse } from 'node-sp-auth';
 
 // Utils
 import { convertSettingsToAuthContext, saveConfigOnDisk, getHiddenPropertyName } from './utils';
@@ -14,11 +14,6 @@ import credentialsWizard from './wizards/askCredentials';
 import saveOnDiskWizard from './wizards/saveOnDisk';
 
 import { getStrategies } from './config'; // getTargetsTypes
-
-// Auth interfaces >>>
-// tslint:disable-next-line:no-duplicate-imports
-import { IAuthOptions, IAuthResponse } from 'node-sp-auth';
-// <<< Auth interfaces
 
 import {
   IAuthContext, IAuthContextSettings, IStrategyDictItem,
@@ -38,9 +33,7 @@ export class AuthConfig {
     this.strategies = getStrategies();
     // this.targets = getTargetsTypes();
     const envMode = process.env.SPAUTH_ENV || process.env.NODE_ENV;
-    const headlessMode = typeof settings.headlessMode !== 'undefined'
-      ? settings.headlessMode
-      : envMode === 'production';
+    const headlessMode = typeof settings.headlessMode !== 'undefined' ? settings.headlessMode : envMode === 'production';
     this.settings = {
       ...settings,
       configPath: path.resolve(settings.configPath || './config/private.json'),
@@ -90,7 +83,7 @@ export class AuthConfig {
   }
 
   private tryAuth = (authContext: IAuthContext): Promise<IAuthResponse> => {
-    return spauth.getAuth(authContext.siteUrl, authContext.authOptions) as any;
+    return getAuth(authContext.siteUrl, authContext.authOptions) as any;
   }
 
   private checkForPrompts = async (): Promise<ICheckPromptsResponse> => {

@@ -1,35 +1,41 @@
-import * as inquirer from 'inquirer';
-
+import { Question, prompt } from 'inquirer';
 import { IUserCredentials } from 'node-sp-auth';
-import { IAuthContext, IAuthConfigSettings } from '../../interfaces';
-import { defaultPasswordMask } from '../../utils';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  const userCredentials: IUserCredentials = (authContext.authOptions as IUserCredentials);
-  const promptFor: inquirer.Question[] = [
+import { defaultPasswordMask } from '../../utils';
+import { IWizardCallback } from '../../interfaces/wizard';
+
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+  const userCredentials = authContext.authOptions as IUserCredentials;
+  const promptFor: Question[] = [
     {
       name: 'username',
       message: 'User name',
       type: 'input',
       default: userCredentials.username,
-      validate: (answer: string) => answer.length > 0
-    }, {
+      validate: (answer) => {
+        if (answer.indexOf('@') === -1) {
+          return 'Wrong username pattern, should be: username@contoso.onmicrosoft.com';
+        }
+        return answer.length > 0;
+      }
+    },
+    {
       name: 'password',
       message: 'Password',
       type: 'password',
+      mask: '*',
       default: userCredentials.password ? defaultPasswordMask : null,
-      validate: (answer: string) => answer.length > 0
+      validate: (answer) => answer.length > 0
     }
   ];
-  return inquirer.prompt(promptFor).then(answers => {
-    return {
-      ...answersAll,
-      ...answers,
-      password: answers.password === defaultPasswordMask
-        ? userCredentials.password
-        : answers.password
-    };
-  });
+  const answers = await prompt(promptFor);
+  return {
+    ...answersAll, ...answers,
+    password: answers.password === defaultPasswordMask
+      ? userCredentials.password
+      : answers.password,
+    online: true
+  };
 };
 
 export default wizard;

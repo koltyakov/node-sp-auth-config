@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer';
 
-import { IAuthContext, IAuthConfigSettings } from '../interfaces';
+import { IWizardCallback } from '../interfaces/wizard';
 
 // Strategies wizards >>>
 import onPremiseAddinWizard from './credentials/OnPremiseAddin';
@@ -13,39 +13,23 @@ import adfsUserWizard from './credentials/AdfsUser';
 import onDemandWizard from './credentials/OnDemand';
 // <<< Strategies wizards
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let answers: Promise<inquirer.Answers>;
-  // Ask for strategy specific parameters
-  switch (answersAll.strategy) {
-    case 'OnPremiseAddinCredentials':
-      answers = onPremiseAddinWizard(authContext, answersAll);
-      break;
-    case 'OnpremiseUserCredentials':
-      answers = onPremiseUserWizard(authContext, answersAll);
-      break;
-    case 'OnpremiseTmgCredentials':
-      answers = onPremiseTmgWizard(authContext, answersAll);
-      break;
-    case 'OnpremiseFbaCredentials':
-      answers = onPremiseFbaWizard(authContext, answersAll);
-      break;
-    case 'OnlineAddinCredentials':
-      answers = onlineAddinWizard(authContext, answersAll);
-      break;
-    case 'UserCredentials':
-      answers = onlineUserWizard(authContext, answersAll);
-      break;
-    case 'AdfsUserCredentials':
-      answers = adfsUserWizard(authContext, answersAll);
-      break;
-    case 'OnDemandCredentials':
-      answers = onDemandWizard(authContext, answersAll);
-      break;
-    default:
-      answers = Promise.resolve(answersAll);
-      break;
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+  const strategyWizard: IWizardCallback = {
+    OnPremiseAddinCredentials: onPremiseAddinWizard,
+    OnpremiseUserCredentials: onPremiseUserWizard,
+    OnpremiseTmgCredentials: onPremiseTmgWizard,
+    OnpremiseFbaCredentials: onPremiseFbaWizard,
+    OnlineAddinCredentials: onlineAddinWizard,
+    UserCredentials: onlineUserWizard,
+    AdfsUserCredentials: adfsUserWizard,
+    OnDemandCredentials: onDemandWizard
+  }[answersAll.strategy];
+
+  if (strategyWizard) {
+    return strategyWizard(authContext, answersAll);
   }
-  return answers;
+
+  return answersAll;
 };
 
 export default wizard;

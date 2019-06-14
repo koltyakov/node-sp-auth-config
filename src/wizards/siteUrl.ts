@@ -1,31 +1,24 @@
-import * as inquirer from 'inquirer';
+import { Question, prompt } from 'inquirer';
 
-import { IAuthContext, IAuthConfigSettings } from '../interfaces';
+import { trimByChar } from '../utils/strings';
+import { IWizardCallback } from '../interfaces/wizard';
 
-const wizard = (authContext: IAuthContext, answersAll: inquirer.Answers = {}, _settings: IAuthConfigSettings = {}): Promise<inquirer.Answers> => {
-  let promptFor: inquirer.Question[] = [];
-
-  // Require SharePoint URL
-  promptFor = [{
+const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+  const promptFor: Question[] = [{
     name: 'siteUrl',
     message: 'SharePoint URL',
-    type: 'string',
+    type: 'input',
     default: authContext.siteUrl,
-    validate: (answer: string) => {
-      if (answer.length === 0) {
-        return false;
-      }
-      return true;
-    }
+    validate: (answer) => answer.length > 0
   }];
 
-  console.log('');
-  return inquirer.prompt(promptFor).then(answers => {
-    return {
-      ...answersAll,
-      ...answers
-    };
-  });
+  console.log(''); // Separate wizard in CLI UI
+  const answers = await prompt(promptFor);
+  const siteUrl: string = answers.siteUrl;
+  return {
+    ...answersAll,
+    siteUrl: trimByChar(siteUrl, '/')
+  };
 };
 
 export default wizard;
