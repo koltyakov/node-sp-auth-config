@@ -31,11 +31,11 @@ export const read = (options: ICliReadParameters): Promise<void> => {
   });
 
   return authConfig.getContext()
-    .then(context => {
+    .then((context) => {
       const contextString = options.format ? JSON.stringify(context, null, 2) : JSON.stringify(context);
       console.log(contextString);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log('Error:', error);
     });
 

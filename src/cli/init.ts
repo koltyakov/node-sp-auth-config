@@ -30,10 +30,10 @@ export const init = (options: ICliInitParameters): Promise<void> => {
   });
 
   return authConfig.getContext()
-    .then(_ => {
+    .then(() => {
       console.log(`\n${colors.green('File saved to')} ${colors.cyan(path.resolve(options.path))}`);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log('Error:', error);
     });
 
