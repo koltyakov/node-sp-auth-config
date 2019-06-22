@@ -28,8 +28,8 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
     ...answersAll, ...answers,
     clientSecret: answers.clientSecret === defaultPasswordMask
       ? onlineAddinCredentials.clientSecret
-      : answers.clientSecret,
-    online: true
+      : answers.clientSecret
+    // online: true
   };
 };
 
