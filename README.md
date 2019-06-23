@@ -1,6 +1,7 @@
 # node-sp-auth-config - Config options builder for node-sp-auth (SharePoint Authentication in Node.js)
 
 [![NPM](https://nodei.co/npm/node-sp-auth-config.png?mini=true&downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-sp-auth-config/)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config?ref=badge_shield)
 
 [![npm version](https://badge.fury.io/js/node-sp-auth-config.svg)](https://badge.fury.io/js/node-sp-auth-config)
 [![Downloads](https://img.shields.io/npm/dm/node-sp-auth-config.svg)](https://www.npmjs.com/package/node-sp-auth-config)
@@ -130,3 +131,7 @@ Along with credentials props these service variables are used:
 | `NODE_ENV` | When equal to `production` forces `headlessMode`. |
 | `SPAUTH_ENV` | When equal to `production` forces `headlessMode`. Overwrites `NODE_ENV`. |
 | `SPAUTH_FORCE` | Makes `SPAUTH_{CREDENTIALS}` variables take precedence over those possibly stored in `private.json`. |
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config?ref=badge_large)
