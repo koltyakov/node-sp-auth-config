@@ -4,7 +4,7 @@
 
 [![npm version](https://badge.fury.io/js/node-sp-auth-config.svg)](https://badge.fury.io/js/node-sp-auth-config)
 [![Downloads](https://img.shields.io/npm/dm/node-sp-auth-config.svg)](https://www.npmjs.com/package/node-sp-auth-config)
-[![Actions Status](https://github.com/koltyakov/node-sp-auth-config/workflows/Node CI/badge.svg)](https://github.com/koltyakov/node-sp-auth-config/actions)
+[![Actions Status](https://github.com/koltyakov/node-sp-auth-config/workflows/Node%20CI/badge.svg)](https://github.com/koltyakov/node-sp-auth-config/actions)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config?ref=badge_shield)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sharepoint-node/Lobby)
 
