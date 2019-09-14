@@ -1,4 +1,4 @@
-import { Question, prompt } from 'inquirer';
+import { Question, prompt, PasswordQuestion } from 'inquirer';
 import { IAdfsUserCredentials } from 'node-sp-auth';
 
 import { defaultPasswordMask } from '../../utils';
@@ -21,7 +21,7 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
       mask: '*',
       default: adfsUserCredentials.password ? defaultPasswordMask : null,
       validate: (answer: string) => answer.length > 0
-    },
+    } as PasswordQuestion,
     {
       name: 'relyingParty',
       message: 'relyingParty',

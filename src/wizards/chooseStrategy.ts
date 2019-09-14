@@ -1,4 +1,4 @@
-import { Question, ChoiceType, Separator, prompt } from 'inquirer';
+import { ListQuestion, ChoiceOptions, Separator, prompt } from 'inquirer';
 import { parse } from 'url';
 
 import { getStrategies } from '../config';
@@ -24,7 +24,7 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
     return strategy.target.indexOf(target) !== -1;
   });
 
-  const promptFor: Question[] = [{
+  const promptFor: ListQuestion[] = [{
     name: 'strategy',
     message: 'Authentication strategy',
     type: 'list',
@@ -32,7 +32,7 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
       if (strategy.withSeparator && choices.length > 0) {
         choices.push(new Separator());
       }
-      const choice: ChoiceType<string> = {
+      const choice: ChoiceOptions = {
         name: strategy.name,
         value: strategy.id,
         short: strategy.name
@@ -45,8 +45,7 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
         position = index;
       }
       return position;
-    }, 0),
-    pageSize: 9
+    }, 0)
   }];
 
   const answers = await prompt(promptFor);

@@ -79,7 +79,7 @@ export const getHiddenPropertyName = (data: { [key: string]: string; }): string 
 };
 
 export const isOnPrem = (siteUrl: string): boolean => {
-  const host = url.parse(siteUrl.toLocaleLowerCase()).host;
+  const host = url.parse(siteUrl.toLocaleLowerCase()).host || '';
   return [
     '.sharepoint.com',
     '.sharepoint.cn',

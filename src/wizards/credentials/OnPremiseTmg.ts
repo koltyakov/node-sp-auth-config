@@ -1,4 +1,4 @@
-import { Question, prompt } from 'inquirer';
+import { Question, prompt, PasswordQuestion } from 'inquirer';
 import { IOnpremiseTmgCredentials } from 'node-sp-auth';
 
 import { defaultPasswordMask } from '../../utils';
@@ -21,7 +21,7 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
       mask: '*',
       default: onPremiseTmgCredentials.password ? defaultPasswordMask : null,
       validate: (answer) => answer.length > 0
-    }
+    } as PasswordQuestion,
   ];
   const answers = await prompt(promptFor);
   return {
