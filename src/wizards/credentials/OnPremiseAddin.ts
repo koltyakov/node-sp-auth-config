@@ -1,9 +1,10 @@
 import { Question, prompt } from 'inquirer';
 import { IOnPremiseAddinCredentials } from 'node-sp-auth';
 
+import { shouldSkipQuestionPromptMapper } from '../../utils/hooks';
 import { IWizardCallback } from '../../interfaces/wizard';
 
-const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+const wizard: IWizardCallback = async (authContext, settings, answersAll = {}) => {
   const onPremiseAddinCredentials = authContext.authOptions as IOnPremiseAddinCredentials;
   const promptFor: Question[] = [
     {
@@ -42,7 +43,21 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
       validate: (answer) => answer.length > 0
     }
   ];
-  const answers = await prompt(promptFor);
+
+  // Save defaults
+  answersAll = {
+    ...answersAll,
+    ...promptFor.reduce((r: any, q) => {
+      if (typeof q.default !== 'undefined') {
+        r[q.name] = q.default;
+      }
+      return r;
+    }, {})
+  };
+
+  const answers = await prompt(
+    await shouldSkipQuestionPromptMapper(promptFor, authContext, settings, answersAll)
+  );
   return { ...answersAll, ...answers };
 };
 

@@ -1,10 +1,11 @@
 import { Question, prompt, PasswordQuestion } from 'inquirer';
 import { IOnpremiseUserCredentials } from 'node-sp-auth';
 
+import { shouldSkipQuestionPromptMapper } from '../../utils/hooks';
 import { defaultPasswordMask } from '../../utils';
 import { IWizardCallback } from '../../interfaces/wizard';
 
-const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+const wizard: IWizardCallback = async (authContext, settings, answersAll = {}) => {
   const onPremiseUserCredentials = authContext.authOptions as IOnpremiseUserCredentials;
   let promptFor: Question[] = [
     {
@@ -48,7 +49,21 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
     default: onPremiseUserCredentials.password ? defaultPasswordMask : null,
     validate: (answer) => answer.length > 0
   } as PasswordQuestion,);
-  const answers = await prompt(promptFor);
+
+  // Save defaults
+  answersAll = {
+    ...answersAll,
+    ...promptFor.reduce((r: any, q) => {
+      if (typeof q.default !== 'undefined') {
+        r[q.name] = q.default;
+      }
+      return r;
+    }, {})
+  };
+
+  const answers = await prompt(
+    await shouldSkipQuestionPromptMapper(promptFor, authContext, settings, answersAll)
+  );
   return {
     ...answersAll, ...answers,
     password: answers.password === defaultPasswordMask

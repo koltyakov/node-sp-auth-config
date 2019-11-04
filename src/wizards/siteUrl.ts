@@ -1,9 +1,10 @@
 import { Question, prompt } from 'inquirer';
 
+import { shouldSkipQuestionPromptMapper } from '../utils/hooks';
 import { trimByChar } from '../utils/strings';
 import { IWizardCallback } from '../interfaces/wizard';
 
-const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+const wizard: IWizardCallback = async (authContext, settings, answersAll = {}) => {
   const promptFor: Question[] = [{
     name: 'siteUrl',
     message: 'SharePoint URL',
@@ -13,8 +14,10 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
   }];
 
   console.log(''); // Separate wizard in CLI UI
-  const answers = await prompt(promptFor);
-  const siteUrl: string = answers.siteUrl;
+  const answers = await prompt(
+    await shouldSkipQuestionPromptMapper(promptFor, authContext, settings, answersAll)
+  );
+  const siteUrl: string = answers.siteUrl || authContext.siteUrl || ''; // save default
   return {
     ...answersAll,
     siteUrl: trimByChar(siteUrl, '/')

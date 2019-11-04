@@ -2,6 +2,8 @@
 import { IAuthOptions } from 'node-sp-auth';
 // Auth interfaces
 
+import { IHooks } from './wizard';
+
 export type StrategyCode =
   | 'OnPremiseAddinCredentials'
   | 'OnpremiseUserCredentials'
@@ -44,6 +46,7 @@ export interface IAuthConfigSettings {
   forcePrompts?: boolean;
   masterKey?: string;
   headlessMode?: boolean;
+  hooks?: IHooks;
 }
 
 export interface ICheckPromptsResponse {

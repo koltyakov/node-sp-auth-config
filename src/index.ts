@@ -69,16 +69,16 @@ export class AuthConfig {
 
     /* === Run Wizard === */
     // Step 1: Require SharePoint URL
-    let answersResult = await siteUrlWizard(authContext, {}, this.settings);
+    let answersResult = await siteUrlWizard(authContext, this.settings, {});
     // Step 2: SharePoint Online/OnPremise autodetection
-    answersResult = await strategyWizard(authContext, answersResult, this.settings);
+    answersResult = await strategyWizard(authContext, this.settings, answersResult);
     // Step 3: Ask for strategy specific parameters
-    answersResult = await credentialsWizard(authContext, answersResult, this.settings);
+    answersResult = await credentialsWizard(authContext, this.settings, answersResult);
     // Step 4: Save on disk
     if (typeof this.customData !== 'undefined') {
       answersResult.custom = this.customData;
     }
-    answersResult = await saveOnDiskWizard(authContext, answersResult, this.settings);
+    answersResult = await saveOnDiskWizard(authContext, this.settings, answersResult);
     return convertSettingsToAuthContext(answersResult as any, this.settings);
   }
 

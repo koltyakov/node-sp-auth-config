@@ -13,7 +13,7 @@ import adfsUserWizard from './credentials/AdfsUser';
 import onDemandWizard from './credentials/OnDemand';
 // <<< Strategies wizards
 
-const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
+const wizard: IWizardCallback = async (authContext, settings, answersAll = {}) => {
   const strategyWizard: IWizardCallback = {
     OnPremiseAddinCredentials: onPremiseAddinWizard,
     OnpremiseUserCredentials: onPremiseUserWizard,
@@ -26,7 +26,7 @@ const wizard: IWizardCallback = async (authContext, answersAll = {}) => {
   }[answersAll.strategy];
 
   if (strategyWizard) {
-    return strategyWizard(authContext, answersAll);
+    return strategyWizard(authContext, settings, answersAll);
   }
 
   return answersAll;
