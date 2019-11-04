@@ -1,7 +1,7 @@
 {
   "name": "node-sp-auth-config",
   "description": "Config options builder for node-sp-auth (SharePoint Authentication in Node.js)",
-  "version": "2.8.0",
+  "version": "2.9.0-beta.0",
   "main": "./dist/index.js",
   "typings": "./dist/index",
   "scripts": {
