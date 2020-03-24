@@ -32,24 +32,23 @@
   "homepage": "https://github.com/koltyakov/node-sp-auth-config#readme",
   "dependencies": {
     "colors": "^1.4.0",
-    "commander": "^3.0.1",
-    "cpass": "^2.2.0",
-    "inquirer": "^7.0.0",
-    "mkdirp": "^0.5.1",
+    "commander": "^5.0.0",
+    "cpass": "^2.3.0",
+    "inquirer": "^7.1.0",
+    "mkdirp": "^1.0.3",
     "node-sp-auth": "^2.5.7"
   },
   "devDependencies": {
-    "@pnp/pnpjs": "^1.3.7",
+    "@pnp/pnpjs": "^2.0.3",
     "@types/colors": "^1.2.1",
     "@types/commander": "^2.12.2",
     "@types/inquirer": "^6.5.0",
-    "@types/mkdirp": "^0.5.2",
-    "@types/node": "^12.12.7",
-    "rimraf": "^3.0.0",
+    "@types/mkdirp": "^1.0.0",
+    "@types/node": "^13.9.3",
+    "rimraf": "^3.0.2",
     "sp-pnp-node": "^2.2.0",
-    "ts-node": "^8.5.0",
-    "tslint": "^5.20.1",
-    "tslint-config-standard": "^9.0.0",
-    "typescript": "^3.7.2"
+    "ts-node": "^8.8.1",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
   }
 }
