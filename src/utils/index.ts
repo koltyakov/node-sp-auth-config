@@ -50,10 +50,7 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
   return new Promise((resolve, reject) => {
     const configDataJson = convertAuthContextToSettings(authContext, settings);
     const saveFolderPath = path.dirname(settings.configPath);
-    mkdirp(saveFolderPath, (err) => {
-      if (err) {
-        console.error(`Error creating folder "${saveFolderPath}"`, err);
-      }
+    mkdirp(saveFolderPath).then(() => {
       const data = JSON.stringify(configDataJson, null, 2);
       fs.writeFile(settings.configPath, data, 'utf8', (err) => {
         if (err) {
@@ -62,6 +59,8 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
         }
         resolve();
       });
+    }).catch((ex) => {
+      console.error(`Error creating folder "${saveFolderPath}"`, ex);
     });
   });
 };

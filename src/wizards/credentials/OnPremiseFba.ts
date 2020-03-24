@@ -22,7 +22,7 @@ const wizard: IWizardCallback = async (authContext, settings, answersAll = {}) =
       mask: '*',
       default: onPremiseFbaCredentials.password ? defaultPasswordMask : null,
       validate: (answer) => answer.length > 0
-    } as PasswordQuestion,
+    } as PasswordQuestion
   ];
 
   // Save defaults

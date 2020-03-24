@@ -6,6 +6,7 @@ import * as path from 'path';
 import { init as initAction } from './cli/init';
 import { read as readAction } from './cli/read';
 
+// tslint:disable-next-line: no-var-requires
 const { version } = require(path.join(__dirname, '..', 'package.json'));
 
 program

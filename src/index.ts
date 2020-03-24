@@ -135,18 +135,15 @@ export class AuthConfig {
 
     this.context = checkObj.jsonRawData as IAuthContextSettings;
 
-    let withPassword: boolean;
     const strategies = this.strategies.filter(strategy => {
       return strategy.id === this.context.strategy;
     });
 
     const passwordPropertyName = getHiddenPropertyName(this.context);
 
-    if (strategies.length === 1) {
-      withPassword = strategies[0].withPassword;
-    } else {
-      withPassword = typeof this.context[passwordPropertyName] !== 'undefined';
-    }
+    const withPassword = strategies.length === 1
+      ? strategies[0].withPassword
+      : typeof this.context[passwordPropertyName] !== 'undefined';
 
     // Strategies with password
     if (withPassword) {

@@ -35,7 +35,7 @@ export const getConfigFromEnvVariables = (): IAuthEnvProps | null => {
       }
       if (authProp === 'custom') {
         try {
-          res['custom'] = JSON.parse(process.env[key]);
+          (res as any).custom = JSON.parse(process.env[key]);
         } catch (ex) { /**/ }
       }
       return res;

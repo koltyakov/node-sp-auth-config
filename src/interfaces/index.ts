@@ -63,4 +63,5 @@ export interface ICliInitParameters {
   format?: boolean;
 }
 
+// tslint:disable-next-line: no-empty-interface
 export interface ICliReadParameters extends ICliInitParameters {}
