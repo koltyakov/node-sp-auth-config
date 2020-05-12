@@ -58,7 +58,7 @@ export const getStrategies = (): IStrategyDictItem[] => {
     },
     {
       id: 'OnDemandCredentials',
-      name: 'On-Demand credentials (Electron is required, not compatible with NTLM)',
+      name: 'On-Demand credentials (Electron@8 is required, not compatible with NTLM)',
       withPassword: false,
       target: ['Online', 'OnPremise'],
       verifyCallback: (...args: any[]) => spauth.isOndemandCredentials(args[1])
