@@ -29,7 +29,7 @@ export const convertAuthContextToSettings = (authContext: IAuthContext, settings
 
 export const convertSettingsToAuthContext = (configObject: IAuthContextSettings, settings: IAuthConfigSettings = {}): IAuthContext => {
   const formattedContext: IAuthContext = {
-    siteUrl: configObject.siteUrl || '',
+    siteUrl: configObject?.siteUrl.split('#')[0] || '',
     strategy: configObject.strategy,
     authOptions: {
       ...(configObject as any)
@@ -78,6 +78,9 @@ export const getHiddenPropertyName = (data: { [key: string]: string; }): string 
 };
 
 export const isOnPrem = (siteUrl: string): boolean => {
+  if (siteUrl.toLocaleLowerCase().indexOf('#spo') !== -1) {
+    return false;
+  }
   const host = url.parse(siteUrl.toLocaleLowerCase()).host || '';
   return [
     '.sharepoint.com',

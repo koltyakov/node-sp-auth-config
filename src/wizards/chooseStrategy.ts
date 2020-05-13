@@ -9,6 +9,9 @@ import { IStrategyDictItem } from '../interfaces';
 import { IWizardCallback } from '../interfaces/wizard';
 
 const wizard: IWizardCallback = async (authContext, settings, answersAll = {}) => {
+  if (answersAll.online && isOnPrem(answersAll.siteUrl)) {
+    answersAll.siteUrl = answersAll.siteUrl + '#spo';
+  }
   // SharePoint Online/OnPremise autodetection
   const target: ('Online' | 'OnPremise') = isOnPrem(answersAll.siteUrl) ? 'OnPremise' : 'Online';
   const { protocol, host } = parse(answersAll.siteUrl);

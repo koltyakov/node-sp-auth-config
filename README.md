@@ -8,7 +8,7 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkoltyakov%2Fnode-sp-auth-config?ref=badge_shield)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/sharepoint-node/Lobby)
 
-`node-sp-auth-config` provides wizard-like approach for building and managing config files for [node-sp-auth](https://github.com/s-KaiNet/node-sp-auth) (Node.js to SharePoint unattended http authentication). Includes CLI for generating config files from command prompt.
+`node-sp-auth-config` provides wizard-like approach for building and managing config files for [node-sp-auth](https://github.com/s-KaiNet/node-sp-auth) (Node.js to SharePoint unattended http authentication). Includes CLI for generating config files from a command prompt.
 
 **Versions supported**:
 
@@ -36,7 +36,7 @@
   - Form-based authentication (FBA)
   - Form-based authentication (Forefront TMG)
 
-Config layer and auth supports Office 365 Dedicated (SPO on custom domain) as well.
+Config layer and auth support Office 365 Dedicated (SPO on a custom domain) as well.
 
 ---
 
@@ -123,7 +123,7 @@ The headless mode also automatically configured when `NODE_ENV` (or `SPAUTH_ENV`
 
 #### Environment variables
 
-All the parameters which are usually stored in `private.json` can be defined also using environment variables. Environment variables started with `SPAUTH_` prefix are recognized with the library. Second part of the name is an actual name of the `node-sp-auth` credentials property yet in uppercase (e.g. `SPAUTH_SITEURL`, `SPAUTH_USERNAME`, `SPAUTH_PASSWORD`).
+All the parameters which are usually stored in `private.json` can be defined also using environment variables. Environment variables started with `SPAUTH_` prefix are recognized with the library. The second part of the name is an actual name of the `node-sp-auth` credentials property yet in uppercase (e.g. `SPAUTH_SITEURL`, `SPAUTH_USERNAME`, `SPAUTH_PASSWORD`).
 
 Along with credentials props these service variables are used:
 
