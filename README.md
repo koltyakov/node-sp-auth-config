@@ -133,6 +133,9 @@ Along with credentials props these service variables are used:
 | `SPAUTH_ENV` | When equal to `production` forces `headlessMode`. Overwrites `NODE_ENV`. |
 | `SPAUTH_FORCE` | Makes `SPAUTH_{CREDENTIALS}` variables take precedence over those possibly stored in `private.json`. |
 
+## Configuring CI/CD
+
+Checkout [this end-to-end sample](https://github.com/koltyakov/sppp-cicd-sample).
 
 ## License
 
