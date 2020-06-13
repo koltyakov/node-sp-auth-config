@@ -9,7 +9,7 @@ export const init = (options: ICliInitParameters): Promise<void> => {
   if (typeof options.path === 'undefined') {
     console.log(
       colors.red(`'${colors.bold('-p, --path')}' parameter should be provided`),
-      colors.gray(`(relative path to file which will store your credentials)`)
+      colors.gray('(relative path to file which will store your credentials)')
     );
     process.exit();
   }

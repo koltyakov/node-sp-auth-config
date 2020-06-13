@@ -65,7 +65,7 @@ export const saveConfigOnDisk = (authContext: IAuthContext, settings: IAuthConfi
   });
 };
 
-export const defaultPasswordMask: string = '********';
+export const defaultPasswordMask = '********';
 
 export const getHiddenPropertyName = (data: { [key: string]: string; }): string => {
   if (data.password) {
