@@ -20,7 +20,7 @@ authConfig.getContext()
     });
     const web = new Web(context.siteUrl);
     web.select('Title').get().then(console.log).catch(() => {
-      console.log(`This should fail by design - test passed!`);
+      console.log('This should fail by design - test passed!');
     });
   })
   .catch(console.warn);

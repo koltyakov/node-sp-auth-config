@@ -135,7 +135,7 @@ export class AuthConfig {
 
     this.context = checkObj.jsonRawData as IAuthContextSettings;
 
-    const strategies = this.strategies.filter(strategy => {
+    const strategies = this.strategies.filter((strategy) => {
       return strategy.id === this.context.strategy;
     });
 
