@@ -16,7 +16,7 @@
 - SharePoint 2019
 - SharePoint 2016
 - SharePoint 2013
-- SharePoint 2010 (limited support)
+- SharePoint 2010
 
 **Authentication options**:
 
