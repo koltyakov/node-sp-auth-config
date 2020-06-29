@@ -26,7 +26,7 @@ export class AuthConfig {
   // private targets: string[];
   private strategies: IStrategyDictItem[];
   private context: IAuthContextSettings;
-  private customData: any;
+  private customData: { [key: string]: string; };
   private cpass: Cpass;
 
   constructor (settings: IAuthConfigSettings = {}) {

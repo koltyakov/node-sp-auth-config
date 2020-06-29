@@ -13,7 +13,8 @@ const config = {
   rules: {
     quotes: [2, 'single', 'avoid-escape'],
     indent: ['error', 2],
-    'arrow-parens': ['error', 'always']
+    'arrow-parens': ['error', 'always'],
+    'no-explicit-any': 0
   },
   settings: {
     react: {
