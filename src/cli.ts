@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as program from 'commander';
+import { program } from 'commander';
 import * as path from 'path';
 
 import { init as initAction } from './cli/init';
